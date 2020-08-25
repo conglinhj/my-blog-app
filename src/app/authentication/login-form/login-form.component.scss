@@ -1,0 +1,23 @@
+.login-form {
+  width: 400px;
+  margin: 0 auto;
+  padding: 40px;
+
+  .full-width-field {
+    width: 100%;
+  }
+
+  .mat-error {
+    margin-bottom: 8px;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+
+    button {
+      margin-bottom: 8px;
+    }
+  }
+}

@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IntegerNumberDirective } from './directives/integer-number.directive';
-import { MaterialModule } from './material.module';
 
 
 @NgModule({
@@ -12,13 +11,11 @@ import { MaterialModule } from './material.module';
   imports: [
     CommonModule,
     FormsModule,
-    MaterialModule,
     ReactiveFormsModule,
   ],
   exports: [
     CommonModule,
     FormsModule,
-    MaterialModule,
     ReactiveFormsModule,
     IntegerNumberDirective
   ],

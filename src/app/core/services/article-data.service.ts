@@ -21,7 +21,7 @@ export class ArticleDataService {
         if (Array.isArray(res)) {
           return of(res.map(data => new Article(data)));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -32,7 +32,7 @@ export class ArticleDataService {
         if (Array.isArray(res)) {
           return of(res.map(data => new Article(data)));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -43,7 +43,7 @@ export class ArticleDataService {
         if (res) {
           return of(new Article(res));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -54,7 +54,7 @@ export class ArticleDataService {
         if (res) {
           return of(new Article(res));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -65,7 +65,7 @@ export class ArticleDataService {
         if (res) {
           return of(true);
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
