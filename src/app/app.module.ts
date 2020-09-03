@@ -7,8 +7,8 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { httpInterceptorProviders } from './core/interceptors';
-import { InMemoryDataService } from './core/services/in-memory-data.service';
+import { httpInterceptorProviders } from './interceptors';
+import { InMemoryDataService } from './services/in-memory-data.service';
 
 
 const InMemoryDB = environment.useMemoryDB

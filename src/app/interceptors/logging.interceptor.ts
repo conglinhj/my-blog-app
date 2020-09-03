@@ -23,7 +23,7 @@ export class LoggingInterceptor implements HttpInterceptor {
             //
           },
           error: (error: HttpErrorResponse) => {
-            console.error('HttpError: ', error);
+            // console.error('HttpError: ', error);
           }
         })
       );
