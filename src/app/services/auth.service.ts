@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { LoginRequestData } from '../core/interfaces/login-request-data';
-import { RegisterRequestData } from '../core/interfaces/register-request-data';
+import { LoginRequestData } from '../interfaces/login-request-data';
+import { RegisterRequestData } from '../interfaces/register-request-data';
 
 @Injectable({
   providedIn: 'root'

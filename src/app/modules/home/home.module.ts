@@ -2,15 +2,15 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
-import { HomePageComponent } from './home-page.component';
+import { HomeComponent } from './home.component';
 
 
 @NgModule({
-  declarations: [HomePageComponent],
+  declarations: [HomeComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([{ path: '', component: HomePageComponent }]),
+    RouterModule.forChild([{ path: '', component: HomeComponent }]),
     MatButtonModule,
   ]
 })
-export class HomePageModule { }
+export class HomeModule { }

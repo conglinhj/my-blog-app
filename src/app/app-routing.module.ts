@@ -1,35 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './authentication/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./home-page/home-page.module').then(m => m.HomePageModule)
+    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
   },
-    {
-    path: 'auth',
-    loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule),
+  {
+    path: 'login',
+    loadChildren: () => import('./modules/login/login.module').then(m => m.LoginModule),
     canActivate: [AuthGuard],
     data: { isAuthenticating: true }
   },
   {
-    path: 'login',
-    redirectTo: 'auth/login'
-  },
-  {
     path: 'register',
-    redirectTo: 'auth/register'
+    loadChildren: () => import('./modules/register/register.module').then(m => m.RegisterModule),
+    canActivate: [AuthGuard],
+    data: { isAuthenticating: true }
   },
   {
     path: 'manage',
-    loadChildren: () => import('./manage/manage.module').then(m => m.ManageModule),
+    loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),
     canActivate: [AuthGuard]
   },
   {
     path: '**',
-    loadChildren: () => import('./not-found-page/not-found-page.module').then(m => m.NotFoundPageModule)
+    loadChildren: () => import('./modules/not-found/not-found.module').then(m => m.NotFoundModule)
   }
 ];
 
