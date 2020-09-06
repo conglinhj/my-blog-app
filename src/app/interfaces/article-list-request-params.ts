@@ -1,4 +1,4 @@
 export interface ArticleListRequestParams {
-  page: number;
-  limit: number;
+  page: string;
+  limit: string;
 }

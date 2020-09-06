@@ -10,7 +10,7 @@
         <input matInput type="password" autocomplete="current-password" formControlName="password">
         <mat-error *ngIf="form.controls.password.errors?.required">required</mat-error>
     </mat-form-field>
-    <mat-hint class="mat-error">{{ errorResponseMessages }}</mat-hint>
+    <mat-hint class="mat-error">{{ form.errors?.apiError }}</mat-hint>
     <div class="actions">
         <button type="submit" mat-raised-button color="primary">Log in</button>
         <a mat-button routerLink="/register">Create new account</a>

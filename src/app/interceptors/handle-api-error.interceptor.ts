@@ -8,9 +8,10 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ApiError } from './../classes/api-error';
 
 @Injectable()
-export class HandleErrorInterceptor implements HttpInterceptor {
+export class HandleApiErrorInterceptor implements HttpInterceptor {
 
   constructor() { }
 
@@ -20,8 +21,9 @@ export class HandleErrorInterceptor implements HttpInterceptor {
 
   private handleError(error: any): Observable<never> {
     if (error instanceof HttpErrorResponse) {
-      return throwError(error.error);
+      return throwError(new ApiError(error));
     }
+    console.error('Unknown error: ', error);
     return throwError(error);
   }
 }

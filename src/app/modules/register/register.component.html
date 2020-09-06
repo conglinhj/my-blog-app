@@ -3,12 +3,18 @@
         <mat-label>Name</mat-label>
         <input matInput formControlName="name" placeholder="">
         <mat-error *ngIf="form.controls.name.errors?.required">The name field is required.</mat-error>
+        <mat-error *ngIf="form.controls.name.errors?.apiError">
+            {{ form.controls.name.errors?.apiError }}
+        </mat-error>
     </mat-form-field>
     <mat-form-field class="full-width-field">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" placeholder="pat@example.com">
         <mat-error *ngIf="form.controls.email.errors?.email">invalid</mat-error>
         <mat-error *ngIf="form.controls.email.errors?.required">The email field is required.</mat-error>
+        <mat-error *ngIf="form.controls.email.errors?.apiError">
+            {{ form.controls.email.errors?.apiError }}
+        </mat-error>
     </mat-form-field>
     <mat-form-field class="full-width-field">
         <mat-label>Password</mat-label>
@@ -22,6 +28,7 @@
             Your password and confirmation password do not match.
         </mat-error>
     </mat-form-field>
+    <mat-hint class="mat-error">{{ form.errors?.apiError }}</mat-hint>
     <div class="actions">
         <button type="submit" color="primary" mat-raised-button>Sign up</button>
         <a mat-button routerLink="/login">If you already have an account, login here</a>
