@@ -1,4 +1,4 @@
-import { CommentData } from './../interfaces/comment-data';
+import { CommentData } from '../interfaces/comment-data';
 
 export class Comment {
 

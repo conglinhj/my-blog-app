@@ -1,10 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { TagData } from '../interfaces/article-data';
+import { Tag } from '../classes/tag';
 import { TagData } from '../interfaces/tag-data';
-import { Tag } from '../models/tag';
-import { HttpApiService } from './http-api.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,11 @@ export class TagDataService {
 
   readonly TAGS_API_PATH = 'tags';
 
-  constructor(private httpApiService: HttpApiService) { }
+  constructor(private http: HttpClient) { }
 
+  // TODO: params interfaces
   getList(params: any): Observable<Tag[]> {
-    return this.httpApiService.get<TagData[]>(this.TAGS_API_PATH, { params }).pipe(
+    return this.http.get<TagData[]>(this.TAGS_API_PATH, { params }).pipe(
       mergeMap(res => {
         if (Array.isArray(res)) {
           return of(res.map(data => new Tag(data)));
@@ -27,7 +28,7 @@ export class TagDataService {
   }
 
   get(id: number): Observable<Tag> {
-    return this.httpApiService.get<{ data: TagData }>(`${this.TAGS_API_PATH}/${id}`).pipe(
+    return this.http.get<{ data: TagData }>(`${this.TAGS_API_PATH}/${id}`).pipe(
       mergeMap(res => {
         if (res && res.data) {
           return of(new Tag(res.data));
@@ -37,8 +38,9 @@ export class TagDataService {
     );
   }
 
+  // TODO: params interfaces
   create(postData: any): Observable<Tag> {
-    return this.httpApiService.post<TagData>(this.TAGS_API_PATH, postData).pipe(
+    return this.http.post<TagData>(this.TAGS_API_PATH, postData).pipe(
       mergeMap(res => {
         if (res) {
           return of(new Tag(res));
@@ -49,7 +51,7 @@ export class TagDataService {
   }
 
   update(id: number, putData: any): Observable<Tag> {
-    return this.httpApiService.put<TagData>(`${this.TAGS_API_PATH}/${id}`, putData).pipe(
+    return this.http.put<TagData>(`${this.TAGS_API_PATH}/${id}`, putData).pipe(
       mergeMap(res => {
         if (res) {
           return of(new Tag(res));
@@ -60,7 +62,7 @@ export class TagDataService {
   }
 
   delete(id: number): Observable<boolean> {
-    return this.httpApiService.delete<boolean>(`${this.TAGS_API_PATH}/${id}`).pipe(
+    return this.http.delete<boolean>(`${this.TAGS_API_PATH}/${id}`).pipe(
       mergeMap(res => {
         if (res) {
           return of(true);

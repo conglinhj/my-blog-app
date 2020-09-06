@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { HandleApiErrorInterceptor } from './handle-api-error.interceptor';
 
-import { HandleErrorInterceptor } from './handle-error.interceptor';
 
 describe('HandleErrorInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      HandleErrorInterceptor
-      ]
+      HandleApiErrorInterceptor
+    ]
   }));
 
   it('should be created', () => {
-    const interceptor: HandleErrorInterceptor = TestBed.inject(HandleErrorInterceptor);
+    const interceptor: HandleApiErrorInterceptor = TestBed.inject(HandleApiErrorInterceptor);
     expect(interceptor).toBeTruthy();
   });
 });

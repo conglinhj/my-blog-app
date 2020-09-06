@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ApiError } from './../../classes/api-error';
 
 
 @Component({
@@ -12,7 +13,6 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit {
 
   form: FormGroup;
-  errorResponseMessages: string;
 
   constructor(
     private fb: FormBuilder,
@@ -33,8 +33,9 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.router.navigate(['/']);
       },
-      error: res => {
-        this.errorResponseMessages = res && res.message || 'Failed';
+      error: (error: ApiError) => {
+        const message = error.message || 'Unexpected error.';
+        this.form.setErrors({ apiError: message });
       }
     });
   }

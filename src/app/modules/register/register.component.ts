@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { ApiError } from 'src/app/classes/api-error';
 import { RegisterRequestData } from '../../interfaces/register-request-data';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register-form',
@@ -50,8 +51,15 @@ export class RegisterComponent implements OnInit {
       next: () => {
         this.router.navigate(['/']);
       },
-      error: res => {
-        console.log(res);
+      error: (error: ApiError) => {
+        const message = error.message || 'Unexpected error.';
+        if (error.getFieldErrors('name')) {
+          this.form.controls.name.setErrors({ apiError: error.getFieldErrors('name')[0] });
+        }
+        if (error.getFieldErrors('email')) {
+          this.form.controls.email.setErrors({ apiError: error.getFieldErrors('email')[0] });
+        }
+        this.form.setErrors({ apiError: message });
       }
     });
   }
