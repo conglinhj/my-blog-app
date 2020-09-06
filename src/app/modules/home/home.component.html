@@ -1,8 +1,1 @@
 <p>home-page works!</p>
-
-<ul *ngIf="!isAuthenticated">
-    <li><a routerLink="/login">login</a></li>
-    <li><a routerLink="/register">register</a></li>
-</ul>
-
-<button mat-raised-button *ngIf="isAuthenticated" (click)="onLogout()">logout</button>

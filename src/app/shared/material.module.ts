@@ -65,7 +65,7 @@ const materialModules = [
   MatIconModule,
   MatInputModule,
   MatListModule,
-  // MatMenuModule,
+  MatMenuModule,
   // MatNativeDateModule,
   MatPaginatorModule,
   MatProgressBarModule,

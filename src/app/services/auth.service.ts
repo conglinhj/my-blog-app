@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, mergeMap } from 'rxjs/operators';
 import { AuthResponseData } from '../interfaces/auth-response-data';
 import { LoginRequestData } from '../interfaces/login-request-data';
 import { RegisterRequestData } from '../interfaces/register-request-data';
-import { UserData } from './../interfaces/user-data';
+import { User } from './../classes/user';
 
 
 @Injectable({
@@ -15,48 +15,66 @@ export class AuthService {
 
   private readonly ACCESS_TOKEN_KEY = 'm_id';
   private readonly USER_KEY = 'm_user';
+  userSubject$: BehaviorSubject<User>;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.userSubject$ = new BehaviorSubject(new User(JSON.parse(localStorage.getItem(this.USER_KEY))));
+  }
 
   get token(): string {
-    return window.localStorage.getItem(this.ACCESS_TOKEN_KEY);
+    return localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
   set token(value: string) {
     if (value) {
-      window.localStorage.setItem(this.ACCESS_TOKEN_KEY, value);
+      localStorage.setItem(this.ACCESS_TOKEN_KEY, value);
     } else {
-      window.localStorage.removeItem(this.ACCESS_TOKEN_KEY);
+      localStorage.removeItem(this.ACCESS_TOKEN_KEY);
     }
   }
 
-  get user(): UserData {
-    return JSON.parse(window.localStorage.getItem(this.USER_KEY));
+  get user(): User {
+    return this.userSubject$.value;
   }
 
-  set user(value: UserData) {
-    if (value) {
-      window.localStorage.setItem(this.USER_KEY, JSON.stringify(value));
+  set user(user: User) {
+    if (user) {
+      localStorage.setItem(this.USER_KEY, JSON.stringify(user.data));
+      this.userSubject$.next(user);
     } else {
-      window.localStorage.removeItem(this.USER_KEY);
+      localStorage.removeItem(this.USER_KEY);
+      this.userSubject$.next(null);
     }
   }
 
   get isAuthenticated(): boolean {
-    return !!this.token;
+    return !!(this.token && this.user);
   }
 
   private isAuthResponseData(res: AuthResponseData): boolean {
     return !!(res && res.access_token && res.data);
   }
 
-  login(data: LoginRequestData): Observable<any> {
+  login(data: LoginRequestData): Observable<User> {
     return this.http.post<AuthResponseData>('login', data).pipe(
       mergeMap(res => {
         if (this.isAuthResponseData(res)) {
           this.token = res.access_token;
-          this.user = res.data;
-          return of(true);
+          this.user = new User(res.data);
+          return of(this.user);
+        }
+        return throwError(false);
+      })
+    );
+  }
+
+  register(data: RegisterRequestData): Observable<User> {
+    return this.http.post<AuthResponseData>('register', data).pipe(
+      mergeMap(res => {
+        if (this.isAuthResponseData(res)) {
+          this.token = res.access_token;
+          this.user = new User(res.data);
+          return of(this.user);
         }
         return throwError(false);
       })
@@ -71,19 +89,6 @@ export class AuthService {
         return of(true);
       }),
       catchError(() => of(false))
-    );
-  }
-
-  register(data: RegisterRequestData): Observable<boolean> {
-    return this.http.post<AuthResponseData>('register', data).pipe(
-      mergeMap(res => {
-        if (this.isAuthResponseData(res)) {
-          this.token = res.access_token;
-          this.user = res.data;
-          return of(true);
-        }
-        return throwError(false);
-      })
     );
   }
 
