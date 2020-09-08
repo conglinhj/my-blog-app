@@ -28,7 +28,9 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.form.updateValueAndValidity();
     if (this.form.invalid) { return; }
+
     this.authService.login(this.form.getRawValue()).subscribe({
       next: () => {
         this.router.navigate(['/']);

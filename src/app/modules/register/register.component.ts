@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.form.updateValueAndValidity();
     if (this.form.invalid) { return; }
 
     const data: RegisterRequestData = {

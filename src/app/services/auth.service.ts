@@ -55,6 +55,11 @@ export class AuthService {
     return !!(res && res.access_token && res.data);
   }
 
+  removeCredentials(): void {
+    this.token = null;
+    this.user = null;
+  }
+
   login(data: LoginRequestData): Observable<User> {
     return this.http.post<AuthResponseData>('login', data).pipe(
       mergeMap(res => {
@@ -81,11 +86,17 @@ export class AuthService {
     );
   }
 
+  verifyAccess(): Observable<boolean> {
+    return this.http.post<AuthResponseData>('verify_access', null).pipe(
+      mergeMap(res => of(!!res)),
+      catchError(() => of(false))
+    );
+  }
+
   logout(): Observable<boolean> {
     return this.http.post('logout', null).pipe(
       mergeMap(() => {
-        this.token = null;
-        this.user = null;
+        this.removeCredentials();
         return of(true);
       }),
       catchError(() => of(false))

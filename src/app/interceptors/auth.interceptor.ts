@@ -1,12 +1,16 @@
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import HttpStatusCode from '../enums/http-status-code.enum';
 import { AuthService } from '../services/auth.service';
+
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -23,6 +27,15 @@ export class AuthInterceptor implements HttpInterceptor {
         },
       });
     }
-    return next.handle(request);
+
+    return next.handle(request)
+      .pipe(
+        catchError(error => {
+          if (error instanceof HttpErrorResponse && error.status === HttpStatusCode.UNAUTHORIZED) {
+            this.authService.removeCredentials();
+          }
+          return throwError(error);
+        })
+      );
   }
 }

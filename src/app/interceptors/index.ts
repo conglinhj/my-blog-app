@@ -7,7 +7,7 @@ import { RequestUrlInterceptor } from './request-url.interceptor';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: HandleApiErrorInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: RequestUrlInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: HandleApiErrorInterceptor, multi: true },
 ];
