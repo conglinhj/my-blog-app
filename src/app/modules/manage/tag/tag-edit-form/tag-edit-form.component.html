@@ -1,0 +1,11 @@
+<form [formGroup]="form">
+    <mat-form-field>
+        <mat-label>Tag name</mat-label>
+        <input matInput formControlName="name">
+        <mat-error *ngIf="form.controls.name.errors?.required">The name field is required.</mat-error>
+        <mat-error *ngIf="form.controls.name.errors?.apiError">
+            {{ form.controls.name.errors?.apiError }}
+        </mat-error>
+    </mat-form-field>
+    <button type="button" mat-raised-button color="primary" (click)="onSubmit()">Save</button>
+</form>

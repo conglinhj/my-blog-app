@@ -5,6 +5,9 @@ import { mergeMap } from 'rxjs/operators';
 import { Tag } from '../classes/tag';
 import { TagData } from '../interfaces/tag-data';
 
+interface ApiResponseData<T> {
+  data: T;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +19,13 @@ export class TagDataService {
   constructor(private http: HttpClient) { }
 
   // TODO: params interfaces
-  getList(params: any): Observable<Tag[]> {
-    return this.http.get<TagData[]>(this.TAGS_API_PATH, { params }).pipe(
+  getList(params?: any): Observable<Tag[]> {
+    return this.http.get<ApiResponseData<TagData[]>>(this.TAGS_API_PATH, { params }).pipe(
       mergeMap(res => {
-        if (Array.isArray(res)) {
-          return of(res.map(data => new Tag(data)));
+        if (res && Array.isArray(res.data)) {
+          return of(res.data.map(data => new Tag(data)));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -33,7 +36,7 @@ export class TagDataService {
         if (res && res.data) {
           return of(new Tag(res.data));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -45,7 +48,7 @@ export class TagDataService {
         if (res) {
           return of(new Tag(res));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -56,7 +59,7 @@ export class TagDataService {
         if (res) {
           return of(new Tag(res));
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
@@ -67,7 +70,7 @@ export class TagDataService {
         if (res) {
           return of(true);
         }
-        throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
