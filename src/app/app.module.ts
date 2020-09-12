@@ -7,6 +7,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { HeaderComponent } from './components/header/header.component';
 import { httpInterceptorProviders } from './interceptors';
 import { InMemoryDataService } from './services/in-memory-data.service';
@@ -21,6 +22,7 @@ const InMemoryDB = environment.useMemoryDB
   declarations: [
     AppComponent,
     HeaderComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -33,6 +35,9 @@ const InMemoryDB = environment.useMemoryDB
   ],
   providers: [
     httpInterceptorProviders
+  ],
+  entryComponents: [
+    ConfirmDialogComponent
   ],
   bootstrap: [AppComponent]
 })

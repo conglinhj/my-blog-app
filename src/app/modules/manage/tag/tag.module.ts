@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule, Routes } from '@angular/router';
-import { ConfirmDialogComponent } from './../../../components/confirm-dialog/confirm-dialog.component';
 import { SharedModule } from './../../../shared/shared.module';
 import { TagCreateFormComponent } from './tag-create-form/tag-create-form.component';
 import { TagEditFormComponent } from './tag-edit-form/tag-edit-form.component';
@@ -25,7 +24,6 @@ const routes: Routes = [
     TagListComponent,
     TagCreateFormComponent,
     TagEditFormComponent,
-    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -37,9 +35,6 @@ const routes: Routes = [
     MatInputModule,
     MatProgressSpinnerModule,
     MatTableModule,
-  ],
-  entryComponents: [
-    ConfirmDialogComponent
   ]
 })
 export class TagModule { }

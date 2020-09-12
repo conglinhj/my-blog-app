@@ -28,7 +28,7 @@ export class TagListComponent implements OnInit {
   onDelete = async (tag: Tag): Promise<void> => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        message: `Do you want to delete #${tag.name} tag?`
+        message: `Do you want to delete the #${tag.name} tag?`
       }
     });
 

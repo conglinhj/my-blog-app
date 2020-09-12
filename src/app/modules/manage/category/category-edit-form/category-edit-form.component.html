@@ -1,0 +1,20 @@
+<form [formGroup]="form">
+    <mat-form-field>
+        <mat-label>Category name</mat-label>
+        <input matInput formControlName="name">
+        <mat-error *ngIf="form.controls.name.errors?.required">The name field is required.</mat-error>
+        <mat-error *ngIf="form.controls.name.errors?.apiError">
+            {{ form.controls.name.errors?.apiError }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+        <mat-error *ngIf="form.controls.description.errors?.apiError">
+            {{ form.controls.description.errors?.apiError }}
+        </mat-error>
+    </mat-form-field>
+</form>
+
+<button type="button" mat-raised-button color="primary" (click)="onSubmit()">Save</button>
