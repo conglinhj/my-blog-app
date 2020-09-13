@@ -6,3 +6,7 @@ export interface TagData {
   updated_at: number;
   deleted_at: number;
 }
+
+export interface TagFormData {
+  name: string;
+}

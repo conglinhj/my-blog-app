@@ -7,10 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule, Routes } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
 import { SharedModule } from './../../../shared/shared.module';
 import { TagCreateFormComponent } from './tag-create-form/tag-create-form.component';
 import { TagEditFormComponent } from './tag-edit-form/tag-edit-form.component';
 import { TagListComponent } from './tag-list/tag-list.component';
+import { tagFeature } from './tag.reducer';
 
 
 const routes: Routes = [
@@ -29,6 +31,7 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
+    StoreModule.forFeature(tagFeature.stateKey, tagFeature.reducer),
     MatButtonModule,
     MatDialogModule,
     MatIconModule,

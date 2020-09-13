@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ApiError } from 'src/app/classes/api-error';
-import { TagDataService } from './../../../../services/tag-data.service';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import * as tagActions from './../tag.actions';
+import * as tagSelectors from './../tag.selectors';
 
 
 @Component({
@@ -10,33 +12,44 @@ import { TagDataService } from './../../../../services/tag-data.service';
   templateUrl: './tag-create-form.component.html',
   styleUrls: ['./tag-create-form.component.scss']
 })
-export class TagCreateFormComponent implements OnInit {
+export class TagCreateFormComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
+  unsubscribe$ = new Subject();
 
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private tagDataService: TagDataService
+    private store: Store,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       name: ['', Validators.required]
     });
+
+    this.store.select(tagSelectors.createError)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(error => {
+        if (error && error.getFieldErrors('name')) {
+          this.form.controls.name.setErrors({ apiError: error.getFieldErrors('name')[0] });
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   onSubmit(): void {
-    if (this.form.invalid) { return; }
-    this.tagDataService.create(this.form.getRawValue()).subscribe({
-      next: _tag => {
-        this.router.navigate(['manage/tags']);
-      },
-      error: (error: ApiError) => {
-        if (error.getFieldErrors('name')) {
-          this.form.controls.name.setErrors({ apiError: error.getFieldErrors('name')[0] });
-        }
-      }
-    });
+    if (this.form.valid) {
+      this.store.dispatch(
+        tagActions.createTag({
+          data: this.form.getRawValue(),
+          redirectTo: 'manage/tags'
+        })
+      );
+    }
   }
+
 }

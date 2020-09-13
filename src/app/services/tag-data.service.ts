@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Tag } from '../classes/tag';
-import { TagData } from '../interfaces/tag-data';
 import { ApiResponseData } from '../interfaces/api-response-data';
+import { TagData, TagFormData } from '../interfaces/tag-data';
 
 
 @Injectable({
@@ -39,8 +39,7 @@ export class TagDataService {
     );
   }
 
-  // TODO: params interfaces
-  create(postData: any): Observable<Tag> {
+  create(postData: TagFormData): Observable<Tag> {
     return this.http.post<ApiResponseData<TagData>>(this.TAGS_API_PATH, postData).pipe(
       mergeMap(res => {
         if (res) {
@@ -51,7 +50,7 @@ export class TagDataService {
     );
   }
 
-  update(id: number, putData: any): Observable<Tag> {
+  update(id: number, putData: TagFormData): Observable<Tag> {
     return this.http.put<ApiResponseData<TagData>>(`${this.TAGS_API_PATH}/${id}`, putData).pipe(
       mergeMap(res => {
         if (res) {
@@ -62,13 +61,13 @@ export class TagDataService {
     );
   }
 
-  delete(id: number): Observable<boolean> {
+  delete(id: number): Observable<number> {
     return this.http.delete<boolean>(`${this.TAGS_API_PATH}/${id}`).pipe(
       mergeMap(res => {
-        if (res) {
-          return of(true);
+        if (res === true) {
+          return of(id);
         }
-        return throwError('RESPONSE_DATA_IS_NOT_VALID');
+        return throwError('FAILED');
       })
     );
   }

@@ -22,7 +22,7 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element">
                 <div class="column-actions">
-                    <button mat-mini-fab color="basic" [routerLink]="'edit/' + element.id">
+                    <button mat-mini-fab color="basic" (click)="onEdit(element)">
                         <mat-icon>edit</mat-icon>
                     </button>
                     <button mat-mini-fab color="warn" (click)="onDelete(element)">

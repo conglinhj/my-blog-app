@@ -34,7 +34,7 @@ export class CategoryListComponent implements OnInit {
     const confirmResutl = await dialogRef.afterClosed().toPromise();
     if (confirmResutl === true) {
       if (await this.categoryDataService.delete(category.id).toPromise()) {
-        location.reload(); // TODO: should do smarter
+        location.reload(); // TODO: should be smarter
       }
     }
   }
