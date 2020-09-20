@@ -25,7 +25,7 @@ export class HeaderComponent implements OnDestroy {
 
   onLogout(): void {
     this.auth.logout().subscribe(() => {
-      location.reload();
+      location.reload(); // TODO: should be smarter
     });
   }
 

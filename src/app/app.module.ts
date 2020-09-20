@@ -3,7 +3,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { TagEffects } from 'src/app/modules/manage/tag/tag.effects';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,8 +34,13 @@ const InMemoryDB = environment.useMemoryDB
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([TagEffects]),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    ...InMemoryDB
+
+    // for development
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    ...InMemoryDB,
   ],
   providers: [
     httpInterceptorProviders
