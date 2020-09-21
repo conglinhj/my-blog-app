@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ApiError } from 'src/app/core/classes/api-error';
-import { CategoryDataService } from 'src/app/core/services/category-data.service';
+import { Store } from '@ngrx/store';
+import { filter } from 'rxjs/operators';
+import * as categoryActions from './../category.actions';
+import * as categorySelectors from './../category.selectors';
 
 
 @Component({
@@ -15,9 +16,8 @@ export class CategoryCreateFormComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private categoryDataService: CategoryDataService
+    private store: Store,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -25,23 +25,26 @@ export class CategoryCreateFormComponent implements OnInit {
       name: ['', Validators.required],
       description: ['']
     });
-  }
 
-  onSubmit(): void {
-    if (this.form.invalid) { return; }
-    this.categoryDataService.create(this.form.getRawValue()).subscribe({
-      next: _category => {
-        this.router.navigate(['manage/categories']);
-      },
-      error: (error: ApiError) => {
+    this.store.select(categorySelectors.getCreateError)
+      .pipe(filter(error => !!error))
+      .subscribe(error => {
         if (error.getFieldErrors('name')) {
           this.form.controls.name.setErrors({ apiError: error.getFieldErrors('name')[0] });
         }
         if (error.getFieldErrors('description')) {
           this.form.controls.description.setErrors({ apiError: error.getFieldErrors('description')[0] });
         }
-      }
-    });
+      });
+  }
+
+  onSubmit(): void {
+    if (this.form.valid) {
+      this.store.dispatch(categoryActions.createCategory({
+        data: this.form.getRawValue(),
+        redirectTo: 'manage/categories'
+      }));
+    }
   }
 
 }

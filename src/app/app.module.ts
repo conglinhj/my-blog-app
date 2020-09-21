@@ -1,3 +1,5 @@
+import { categoryFeature } from './modules/manage/category/category.reducers';
+import { tagFeature } from './modules/manage/tag/tag.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +17,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { HeaderComponent } from './components/header/header.component';
 import { httpInterceptorProviders } from './core/interceptors';
 import { InMemoryDataService } from './core/services/in-memory-data.service';
+import { CategoryEffects } from './modules/manage/category/category.effects';
 import { MaterialModule } from './shared/material.module';
 
 
@@ -34,8 +37,14 @@ const InMemoryDB = environment.useMemoryDB
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([TagEffects]),
+    StoreModule.forRoot({
+      [tagFeature.key]: tagFeature.reducers,
+      [categoryFeature.key]: categoryFeature.reducers
+    }),
+    EffectsModule.forRoot([
+      TagEffects,
+      CategoryEffects,
+    ]),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
 
     // for development

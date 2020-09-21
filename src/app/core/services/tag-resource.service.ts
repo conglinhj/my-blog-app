@@ -10,7 +10,7 @@ import { TagData, TagFormData } from '../interfaces/tag-data';
 @Injectable({
   providedIn: 'root'
 })
-export class TagDataService {
+export class TagResourceService {
 
   readonly TAGS_API_PATH = 'tags';
 
