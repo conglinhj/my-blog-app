@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { AppState } from '../../../interfaces/app-state';
+import { AppState } from 'src/app/core/interfaces/app-state';
 import { TagState } from './tag.reducer';
 
 

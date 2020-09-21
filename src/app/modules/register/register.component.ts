@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiError } from 'src/app/classes/api-error';
-import { RegisterRequestData } from '../../interfaces/register-request-data';
-import { AuthService } from '../../services/auth.service';
+import { ApiError } from 'src/app/core/classes/api-error';
+import { RegisterRequestData } from 'src/app/core/interfaces/register-request-data';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-register-form',

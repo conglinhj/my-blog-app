@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
-import { ApiError } from 'src/app/classes/api-error';
-import { CategoryDataService } from 'src/app/services/category-data.service';
-import { Category } from './../../../../classes/category';
+import { ApiError } from 'src/app/core/classes/api-error';
+import { CategoryDataService } from 'src/app/core/services/category-data.service';
+import { Category } from 'src/app/core/classes/category';
 
 @Component({
   selector: 'app-category-edit-form',

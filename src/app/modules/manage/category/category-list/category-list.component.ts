@@ -1,5 +1,5 @@
-import { CategoryDataService } from './../../../../services/category-data.service';
-import { Category } from './../../../../classes/category';
+import { CategoryDataService } from 'src/app/core/services/category-data.service';
+import { Category } from 'src/app/core/classes/category';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subject } from 'rxjs';

@@ -13,8 +13,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { HeaderComponent } from './components/header/header.component';
-import { httpInterceptorProviders } from './interceptors';
-import { InMemoryDataService } from './services/in-memory-data.service';
+import { httpInterceptorProviders } from './core/interceptors';
+import { InMemoryDataService } from './core/services/in-memory-data.service';
 import { MaterialModule } from './shared/material.module';
 
 

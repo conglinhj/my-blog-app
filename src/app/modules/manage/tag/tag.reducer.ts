@@ -1,6 +1,6 @@
 import { Action, ActionReducer, createReducer, on } from '@ngrx/store';
-import { Tag } from 'src/app/classes/tag';
-import { ApiError } from './../../../classes/api-error';
+import { Tag } from 'src/app/core/classes/tag';
+import { ApiError } from 'src/app/core/classes/api-error';
 import * as tagActions from './tag.actions';
 
 

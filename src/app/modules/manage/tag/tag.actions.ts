@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { Tag } from 'src/app/classes/tag';
-import { TagFormData } from 'src/app/interfaces/tag-data';
-import { ApiError } from './../../../classes/api-error';
+import { Tag } from 'src/app/core/classes/tag';
+import { TagFormData } from 'src/app/core/interfaces/tag-data';
+import { ApiError } from 'src/app/core/classes/api-error';
 
 
 export const TAG_ACTION_IDS = Object.freeze({

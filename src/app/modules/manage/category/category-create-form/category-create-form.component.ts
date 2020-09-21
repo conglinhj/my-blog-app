@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiError } from 'src/app/classes/api-error';
-import { CategoryDataService } from 'src/app/services/category-data.service';
+import { ApiError } from 'src/app/core/classes/api-error';
+import { CategoryDataService } from 'src/app/core/services/category-data.service';
 
 
 @Component({

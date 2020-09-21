@@ -10,8 +10,8 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import { AppState } from 'src/app/interfaces/app-state';
-import { TagDataService } from '../../../services/tag-data.service';
+import { AppState } from 'src/app/core/interfaces/app-state';
+import { TagDataService } from 'src/app/core/services/tag-data.service';
 import * as tagActions from './tag.actions';
 
 @Injectable()
