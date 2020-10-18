@@ -8,3 +8,8 @@ export interface CategoryData {
   updated_at: number;
   deleted_at: number;
 }
+
+export interface CategoryFormData {
+  name: string;
+  parent_id: number;
+}

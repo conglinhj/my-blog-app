@@ -27,6 +27,9 @@ const _tagReducer: ActionReducer<TagState> = createReducer(
     return { ...state, selectedTag: tag };
   }),
   on(tagActions.createTagSuccess, (state, { tag }) => {
+    if (!state.list || !state.list.length) {
+      return { ...state };
+    }
     return { ...state, list: [...state.list, tag] };
   }),
   on(tagActions.createTagFailed, (state, { error }) => {
@@ -51,8 +54,8 @@ const _tagReducer: ActionReducer<TagState> = createReducer(
   })
 );
 
-function reducer(state: TagState, action: Action): TagState {
+function reducers(state: TagState, action: Action): TagState {
   return _tagReducer(state, action);
 }
 
-export const tagFeature = { stateKey: 'tag', reducer };
+export const tagFeature = { key: 'tag', reducers };

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Tag } from 'src/app/core/classes/tag';
 import { AppState } from 'src/app/core/interfaces/app-state';
 import { ConfirmDialogComponent } from './../../../../components/confirm-dialog/confirm-dialog.component';
-import { deleteTag, getList } from './../tag.actions';
+import * as tagActions from './../tag.actions';
 import * as tagSelectors from './../tag.selectors';
 
 
@@ -25,7 +25,7 @@ export class TagListComponent {
     private router: Router,
     private dialog: MatDialog
   ) {
-    this.store.dispatch(getList());
+    this.store.dispatch(tagActions.getList());
     this.tags$ = this.store.select(tagSelectors.listOfTags);
   }
 
@@ -33,13 +33,16 @@ export class TagListComponent {
     this.router.navigate([`manage/tags/edit/${tag.id}`]);
   }
 
-  onDelete(tag: Tag): void {
+  async onDelete(tag: Tag): Promise<void> {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         message: `Do you want to delete the #${tag.name} tag?`
       }
     });
 
-    dialogRef.afterClosed().subscribe(ok => ok && this.store.dispatch(deleteTag({ id: tag.id })));
+    const result = await dialogRef.afterClosed().toPromise();
+    if (result === true) {
+      this.store.dispatch(tagActions.deleteTag({ id: tag.id }));
+    }
   }
 }

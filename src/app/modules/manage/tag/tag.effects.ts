@@ -10,35 +10,39 @@ import {
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import { AppState } from 'src/app/core/interfaces/app-state';
-import { TagDataService } from 'src/app/core/services/tag-data.service';
+import { TagResourceService } from 'src/app/core/services/tag-resource.service';
 import * as tagActions from './tag.actions';
+import * as tagSelectors from './tag.selectors';
+
 
 @Injectable()
 export class TagEffects {
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private actions$: Actions,
-    private tagDataService: TagDataService,
+    private tagDataService: TagResourceService,
     private router: Router
   ) { }
 
   getList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(tagActions.getList),
-      withLatestFrom(this.store.select('tag')),
-      mergeMap(([_action, { list }]) =>
+      withLatestFrom(this.store.select(tagSelectors.listOfTags)),
+      mergeMap(([_action, list]) =>
         list && list.length ? of(list) : this.tagDataService.getList()
       ),
       mergeMap((tags) => of(tagActions.getListSuccess({ list: tags }))),
-      catchError((error) => of(tagActions.getListFailed({ error })))
+      catchError((error) => {
+        console.error(error);
+        return of(tagActions.getListFailed({ error }));
+      })
     ));
 
   getTag$ = createEffect(() =>
     this.actions$.pipe(
       ofType(tagActions.getTag),
-      withLatestFrom(this.store.select('tag')),
-      mergeMap(([action, { list }]) => {
+      withLatestFrom(this.store.select(tagSelectors.listOfTags)),
+      mergeMap(([action, list]) => {
         const found = list.find((tag) => tag.id === action.id);
         return found ? of(found) : this.tagDataService.get(action.id);
       }),

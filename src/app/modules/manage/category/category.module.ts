@@ -6,18 +6,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from './../../../shared/shared.module';
 import { CategoryCreateFormComponent } from './category-create-form/category-create-form.component';
 import { CategoryEditFormComponent } from './category-edit-form/category-edit-form.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 
-
-const routes: Routes = [
-  { path: '', component: CategoryListComponent },
-  { path: 'create', component: CategoryCreateFormComponent },
-  { path: 'edit/:id', component: CategoryEditFormComponent },
-];
 
 @NgModule({
   declarations: [
@@ -28,7 +22,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild([
+      { path: '', component: CategoryListComponent },
+      { path: 'create', component: CategoryCreateFormComponent },
+      { path: 'edit/:id', component: CategoryEditFormComponent },
+    ]),
     MatButtonModule,
     MatDialogModule,
     MatIconModule,

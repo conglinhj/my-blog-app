@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { first, takeUntil } from 'rxjs/operators';
-import { getTag, updateTag } from './../tag.actions';
+import * as tagActions from './../tag.actions';
 import * as tagSelectors from './../tag.selectors';
 
 
@@ -32,7 +32,7 @@ export class TagEditFormComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(params => {
         this.tagId = +params.id;
-        this.store.dispatch(getTag({ id: this.tagId }));
+        this.store.dispatch(tagActions.getTag({ id: this.tagId }));
       });
 
     this.store.select(tagSelectors.selectedTag)
@@ -62,7 +62,7 @@ export class TagEditFormComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.form.valid) {
       this.store.dispatch(
-        updateTag({
+        tagActions.updateTag({
           id: this.tagId,
           data: this.form.getRawValue(),
           redirectTo: 'manage/tags'

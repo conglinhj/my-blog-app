@@ -1,26 +1,24 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/core/interfaces/app-state';
-import { TagState } from './tag.reducer';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { tagFeature, TagState } from './tag.reducer';
 
-
-export const tagState = (state: AppState) => state.tag;
+export const getTagState = createFeatureSelector<TagState>(tagFeature.key);
 
 export const selectedTag = createSelector(
-  tagState,
-  (tag: TagState) => tag.selectedTag
+  getTagState,
+  state => state.selectedTag
 );
 
 export const listOfTags = createSelector(
-  tagState,
-  (tag: TagState) => tag.list
+  getTagState,
+  state => state.list
 );
 
 export const updateError = createSelector(
-  tagState,
-  (tag: TagState) => tag.updateError
+  getTagState,
+  state => state.updateError
 );
 
 export const createError = createSelector(
-  tagState,
-  (tag: TagState) => tag.createError
+  getTagState,
+  state => state.createError
 );

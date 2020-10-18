@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { mergeMap } from 'rxjs/operators';
-import { ApiError } from 'src/app/core/classes/api-error';
-import { CategoryDataService } from 'src/app/core/services/category-data.service';
+import { Store } from '@ngrx/store';
+import { of, throwError } from 'rxjs';
+import { filter, mergeMap, first } from 'rxjs/operators';
 import { Category } from 'src/app/core/classes/category';
+import * as categoryActions from './../category.actions';
+import * as categorySelectors from './../category.selectors';
+
 
 @Component({
   selector: 'app-category-edit-form',
@@ -17,10 +20,10 @@ export class CategoryEditFormComponent implements OnInit {
   category: Category;
 
   constructor(
+    private store: Store,
     private fb: FormBuilder,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private categoryDataService: CategoryDataService
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -30,38 +33,47 @@ export class CategoryEditFormComponent implements OnInit {
     });
 
     this.activatedRoute.params
+      .subscribe(params => {
+        this.store.dispatch(categoryActions.getCategory({ id: +params.id }));
+      });
+
+    this.store.select(categorySelectors.getSelectedCategory)
       .pipe(
-        mergeMap(params => {
-          return this.categoryDataService.get(+params.id);
-        })
-      )
-      .subscribe({
-        next: category => {
-          this.category = category;
+        first(category => !!category),
+        mergeMap(category => {
           this.form.setValue({
             name: category.name,
             description: category.description
           });
-        },
-        error: () => this.router.navigate(['manage/cateories'])
+          this.form.updateValueAndValidity();
+          this.category = category;
+          return of(category);
+        })
+      )
+      .subscribe({
+        error: () => this.router.navigate(['manage/categories'])
       });
-  }
 
-  onSubmit(): void {
-    if (this.form.invalid) { return; }
-    this.categoryDataService.update(this.category.id, this.form.getRawValue()).subscribe({
-      next: _category => {
-        this.router.navigate(['manage/categories']);
-      },
-      error: (error: ApiError) => {
+    this.store.select(categorySelectors.getUpdateError)
+      .pipe(filter(error => !!error))
+      .subscribe(error => {
         if (error.getFieldErrors('name')) {
           this.form.controls.name.setErrors({ apiError: error.getFieldErrors('name')[0] });
         }
         if (error.getFieldErrors('description')) {
           this.form.controls.description.setErrors({ apiError: error.getFieldErrors('description')[0] });
         }
-      }
-    });
+      });
+  }
+
+  onSubmit(): void {
+    if (this.form.valid) {
+      this.store.dispatch(categoryActions.updateCategory({
+        id: this.category.id,
+        data: this.form.getRawValue(),
+        redirectTo: 'manage/categories'
+      }));
+    }
   }
 
 }

@@ -4,13 +4,13 @@ import { Observable, of, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Category } from '../classes/category';
 import { ApiResponseData } from '../interfaces/api-response-data';
-import { CategoryData } from '../interfaces/category-data';
+import { CategoryData, CategoryFormData } from '../interfaces/category-data';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryDataService {
+export class CategoryResourceService {
 
   readonly CATEGORY_API_PATH = 'categories';
 
@@ -40,7 +40,7 @@ export class CategoryDataService {
   }
 
   // TODO: params interfaces
-  create(postData: any): Observable<Category> {
+  create(postData: CategoryFormData): Observable<Category> {
     return this.http.post<ApiResponseData<CategoryData>>(this.CATEGORY_API_PATH, postData).pipe(
       mergeMap(res => {
         if (res) {
@@ -51,7 +51,7 @@ export class CategoryDataService {
     );
   }
 
-  update(id: number, putData: any): Observable<Category> {
+  update(id: number, putData: CategoryFormData): Observable<Category> {
     return this.http.put<ApiResponseData<CategoryData>>(`${this.CATEGORY_API_PATH}/${id}`, putData).pipe(
       mergeMap(res => {
         if (res) {
@@ -72,5 +72,4 @@ export class CategoryDataService {
       })
     );
   }
-
 }
