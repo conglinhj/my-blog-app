@@ -1,0 +1,21 @@
+<div class="actions">
+    <button type="button" mat-raised-button color="primary">publish</button>
+    <button type="button" mat-raised-button color="warn">draft</button>
+    <small *ngIf="isSavedAutomatically">this article is automatically drafted</small>
+</div>
+
+<form [formGroup]="form">
+    <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input formControlName="title" matInput type="text" placeholder="Title">
+        <mat-error *ngIf="form.controls.title.hasError('required')">required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description" matInput placeholder="Description" rows="5"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Content</mat-label>
+        <textarea formControlName="content" matInput rows="30"></textarea>
+    </mat-form-field>
+</form>
