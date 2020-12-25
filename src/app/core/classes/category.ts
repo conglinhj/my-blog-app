@@ -1,47 +1,23 @@
 import { CategoryData } from './../interfaces/category-data';
 
+
 export class Category {
 
-  constructor(public data: CategoryData) { }
+  readonly id: number;
+  readonly slug: string;
+  parentId: number;
+  name: string;
+  description: string;
+  readonly createdAt: number;
+  readonly updatedAt: number;
 
-  get id(): number {
-    return this.data.id;
+  constructor(public data: CategoryData) {
+    this.id = data.id;
+    this.parentId = data.parent_id;
+    this.slug = data.slug;
+    this.name = data.name;
+    this.description = data.description;
+    this.createdAt = data.created_at;
+    this.updatedAt = data.updated_at;
   }
-
-  get parentId(): number {
-    return this.data.parent_id;
-  }
-
-  get slug(): string {
-    return this.data.slug;
-  }
-
-  get name(): string {
-    return this.data.name;
-  }
-
-  set name(value: string) {
-    this.data.name = value;
-  }
-
-  get description(): string {
-    return this.data.description;
-  }
-
-  set description(value: string) {
-    this.data.description = value;
-  }
-
-  get createdAt(): number {
-    return this.data.created_at;
-  }
-
-  get updatedAt(): number {
-    return this.data.updated_at;
-  }
-
-  get deletedAt(): number {
-    return this.data.deleted_at;
-  }
-
 }

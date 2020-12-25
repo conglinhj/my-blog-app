@@ -1,71 +1,31 @@
 import { ArticleData } from './../interfaces/article-data';
 
+
 export class Article {
 
-  constructor(public data: ArticleData) { }
+  readonly id: number;
+  readonly authorId: number;
+  readonly slug: string;
+  categoryId: number;
+  title: string;
+  description: string;
+  content: string;
+  readonly isPublished: boolean;
+  readonly publishedAt: number;
+  readonly createdAt: number;
+  readonly updatedAt: number;
 
-  get id(): number {
-    return this.data.id;
+  constructor(public data: ArticleData) {
+    this.id = data.id;
+    this.authorId = data.author_id;
+    this.categoryId = data.category_id;
+    this.slug = data.slug;
+    this.title = data.title;
+    this.description = data.description;
+    this.content = data.content;
+    this.isPublished = data.is_published;
+    this.publishedAt = data.published_at;
+    this.createdAt = data.created_at;
+    this.updatedAt = data.updated_at;
   }
-
-  get authorId(): number {
-    return this.data.author_id;
-  }
-
-  get categoryId(): number {
-    return this.data.category_id;
-  }
-
-  set categoryId(value: number) {
-    this.data.category_id = value;
-  }
-
-  get slug(): string {
-    return this.data.slug;
-  }
-
-  get title(): string {
-    return this.data.title;
-  }
-
-  set title(value: string) {
-    this.data.title = value;
-  }
-
-  get description(): string {
-    return this.data.description;
-  }
-
-  set description(value: string) {
-    this.data.description = value;
-  }
-
-  get content(): string {
-    return this.data.content;
-  }
-
-  set content(value: string) {
-    this.data.content = value;
-  }
-
-  get isPublished(): boolean {
-    return this.data.is_published;
-  }
-
-  get publishedAt(): number {
-    return this.data.published_at;
-  }
-
-  get createdAt(): number {
-    return this.data.created_at;
-  }
-
-  get updatedAt(): number {
-    return this.data.updated_at;
-  }
-
-  get deletedAt(): number {
-    return this.data.deleted_at;
-  }
-
 }
