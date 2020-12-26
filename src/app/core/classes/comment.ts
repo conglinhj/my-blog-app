@@ -1,47 +1,23 @@
 import { CommentData } from '../interfaces/comment-data';
 
+
 export class Comment {
 
-  constructor(public data: CommentData) { }
+  readonly id: number;
+  readonly parentId: number;
+  readonly authorId: number;
+  readonly articleId: number;
+  readonly createdAt: number;
+  readonly updatedAt: number;
+  content: string;
 
-  get id(): number {
-    return this.data.id;
+  constructor(public data: CommentData) {
+    this.id = data.id;
+    this.parentId = data.parent_id;
+    this.authorId = data.author_id;
+    this.articleId = data.article_id;
+    this.createdAt = data.created_at;
+    this.updatedAt = data.updated_at;
+    this.content = data.content;
   }
-
-  get parentId(): number {
-    return this.data.parent_id;
-  }
-
-  set parentId(value: number) {
-    this.data.parent_id = value;
-  }
-
-  get authorId(): number {
-    return this.data.author_id;
-  }
-
-  get articleId(): number {
-    return this.data.article_id;
-  }
-
-  get content(): string {
-    return this.data.content;
-  }
-
-  set content(value: string) {
-    this.data.content = value;
-  }
-
-  get createdAt(): number {
-    return this.data.created_at;
-  }
-
-  get updatedAt(): number {
-    return this.data.updated_at;
-  }
-
-  get deletedAt(): number {
-    return this.data.deleted_at;
-  }
-
 }

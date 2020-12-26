@@ -18,7 +18,8 @@ export class AuthService {
   userSubject$: BehaviorSubject<User>;
 
   constructor(private http: HttpClient) {
-    this.userSubject$ = new BehaviorSubject(new User(JSON.parse(localStorage.getItem(this.USER_KEY))));
+    const localUserData = JSON.parse(localStorage.getItem(this.USER_KEY));
+    this.userSubject$ = new BehaviorSubject(localUserData && new User(localUserData));
   }
 
   get token(): string {

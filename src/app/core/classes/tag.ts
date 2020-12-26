@@ -1,35 +1,19 @@
 import { TagData } from './../interfaces/tag-data';
 
+
 export class Tag {
 
-  constructor(public data: TagData) { }
+  readonly id: number;
+  readonly slug: string;
+  readonly createdAt: number;
+  readonly updatedAt: number;
+  name: string;
 
-  get id(): number {
-    return this.data.id;
+  constructor(public data: TagData) {
+    this.id = data.id;
+    this.slug = data.slug;
+    this.createdAt = data.created_at;
+    this.updatedAt = data.updated_at;
+    this.name = data.name;
   }
-
-  get slug(): string {
-    return this.data.slug;
-  }
-
-  get name(): string {
-    return this.data.name;
-  }
-
-  set name(value: string) {
-    this.data.name = value;
-  }
-
-  get createdAt(): number {
-    return this.data.created_at;
-  }
-
-  get updatedAt(): number {
-    return this.data.updated_at;
-  }
-
-  get deletedAt(): number {
-    return this.data.deleted_at;
-  }
-
 }

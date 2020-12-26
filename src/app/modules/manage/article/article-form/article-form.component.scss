@@ -1,0 +1,16 @@
+form {
+  width: 100%;
+  margin-bottom: 16px;
+
+  .mat-form-field {
+    width: 100%;
+  }
+}
+
+.actions {
+  margin-bottom: 32px;
+
+  button:not(:last-child) {
+    margin-right: 20px;
+  }
+}

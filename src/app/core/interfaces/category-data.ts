@@ -6,7 +6,6 @@ export interface CategoryData {
   description: string;
   created_at: number;
   updated_at: number;
-  deleted_at: number;
 }
 
 export interface CategoryFormData {

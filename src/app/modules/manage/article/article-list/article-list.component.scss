@@ -1,0 +1,27 @@
+table {
+  width: 100%;
+  max-width: 800px;
+
+  .column-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+
+  .mat-row {
+    &.active {
+      background-color: aliceblue;
+    }
+
+    &:not(.active) .column-actions {
+      visibility: hidden;
+    }
+  }
+}
+
+.add-new {
+  margin-bottom: 16px;
+}
