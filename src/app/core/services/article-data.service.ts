@@ -22,21 +22,21 @@ export class ArticleDataService {
       limit: String(params.limit)
     };
 
-    return this.http.get<ArticleData[]>(this.ARTICLES_API_PATH, { params: formatedParams }).pipe(
+    return this.http.get<{ data: ArticleData[] }>(this.ARTICLES_API_PATH, { params: formatedParams }).pipe(
       mergeMap(res => {
-        if (Array.isArray(res)) {
-          return of(res.map(data => new Article(data)));
+        if (res && Array.isArray(res.data)) {
+          return of(res.data.map(data => new Article(data)));
         }
         return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
     );
   }
 
-  get(id: number): Observable<Article[]> {
-    return this.http.get<ArticleData[]>(`${this.ARTICLES_API_PATH}/${id}`).pipe(
+  get(id: number): Observable<Article> {
+    return this.http.get<{ data: ArticleData }>(`${this.ARTICLES_API_PATH}/${id}`).pipe(
       mergeMap(res => {
-        if (Array.isArray(res)) {
-          return of(res.map(data => new Article(data)));
+        if (res && res.data) {
+          return of(new Article(res.data));
         }
         return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
