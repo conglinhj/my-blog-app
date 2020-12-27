@@ -1,5 +1,5 @@
-import { TagState } from '../../modules/manage/tag/tag.reducer';
-import { CategoryState } from './../../modules/manage/category/category.reducers';
+import { TagState } from 'src/app/management/tag/tag.reducer';
+import { CategoryState } from 'src/app/management/category/category.reducers';
 
 export interface AppState {
   tag: TagState;

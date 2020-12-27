@@ -6,7 +6,7 @@
     </button>
     <mat-menu #menu="matMenu">
         <ng-container *ngIf="isAuthenticated else loginLink">
-            <a mat-menu-item routerLink="/manage">
+            <a mat-menu-item routerLink="/management">
                 <mat-icon>format_list_bulleted</mat-icon> management
             </a>
             <a mat-menu-item (click)="onLogout()">

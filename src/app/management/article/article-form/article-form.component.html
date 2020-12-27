@@ -1,0 +1,34 @@
+<div class="actions">
+    <button type="button"
+            mat-raised-button
+            color="primary"
+            (click)="onSave(true)">Publish</button>
+    <button type="button"
+            mat-raised-button
+            color="warn"
+            (click)="onSave(false)">Draft</button>
+</div>
+
+<form [formGroup]="form">
+    <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input formControlName="title"
+               matInput
+               type="text"
+               placeholder="Title">
+        <mat-error *ngIf="form.controls.title.hasError('required')">required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description"
+                  matInput
+                  placeholder="Description"
+                  rows="5"></textarea>
+    </mat-form-field>
+
+    <editor formControlName="content"
+            class="content-editor"
+            [init]="editorConfig">
+    </editor>
+</form>

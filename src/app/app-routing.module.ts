@@ -6,28 +6,32 @@ import { AuthGuard } from './core/guards/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+  },
+  {
+    path: 'article/:id',
+    loadChildren: () => import('./pages/article-detail/article-detail.module').then(m => m.ArticleDetailModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./modules/login/login.module').then(m => m.LoginModule),
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
     canActivate: [AuthGuard],
     data: { isAuthenticating: true }
   },
   {
     path: 'register',
-    loadChildren: () => import('./modules/register/register.module').then(m => m.RegisterModule),
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterModule),
     canActivate: [AuthGuard],
     data: { isAuthenticating: true }
   },
   {
-    path: 'manage',
-    loadChildren: () => import('./modules/manage/manage.module').then(m => m.ManageModule),
+    path: 'management',
+    loadChildren: () => import('./management/management.module').then(m => m.ManagementModule),
     canActivate: [AuthGuard]
   },
   {
     path: '**',
-    loadChildren: () => import('./modules/not-found/not-found.module').then(m => m.NotFoundModule)
+    loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule)
   }
 ];
 

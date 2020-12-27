@@ -1,0 +1,15 @@
+.management-container {
+  display: flex;
+  flex-wrap: wrap;
+  height: calc(100% - 64px);
+
+  .management-sidebar {
+    width: 250px;
+    border-right: 2px inset;
+  }
+
+  .management-content {
+    flex: 1;
+    padding: 16px;
+  }
+}

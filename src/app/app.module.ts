@@ -1,5 +1,3 @@
-import { categoryFeature } from './modules/manage/category/category.reducers';
-import { tagFeature } from './modules/manage/tag/tag.reducer';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,7 +7,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { TagEffects } from 'src/app/modules/manage/tag/tag.effects';
+import { CategoryEffects } from 'src/app/management/category/category.effects';
+import { categoryFeature } from 'src/app/management/category/category.reducers';
+import { TagEffects } from 'src/app/management/tag/tag.effects';
+import { tagFeature } from 'src/app/management/tag/tag.reducer';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,7 +18,6 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { HeaderComponent } from './components/header/header.component';
 import { httpInterceptorProviders } from './core/interceptors';
 import { InMemoryDataService } from './core/services/in-memory-data.service';
-import { CategoryEffects } from './modules/manage/category/category.effects';
 import { MaterialModule } from './shared/material.module';
 
 

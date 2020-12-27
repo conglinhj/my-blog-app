@@ -1,0 +1,14 @@
+.home-container {
+  padding: 32px;
+
+  .article-list {
+    &-item {
+      margin-bottom: 32px;
+
+      a {
+        color: orangered;
+        text-decoration: none;
+      }
+    }
+  }
+}

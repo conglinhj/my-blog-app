@@ -12,7 +12,7 @@ import { ArticleListRequestParams } from '../interfaces/article-list-request-par
 })
 export class ArticleDataService {
 
-  readonly ARTICLES_API_PATH = 'articles';
+  static readonly API_PATH = 'articles';
 
   constructor(private http: HttpClient) { }
 
@@ -22,7 +22,7 @@ export class ArticleDataService {
       limit: String(params.limit)
     };
 
-    return this.http.get<{ data: ArticleData[] }>(this.ARTICLES_API_PATH, { params: formatedParams }).pipe(
+    return this.http.get<{ data: ArticleData[] }>(ArticleDataService.API_PATH, { params: formatedParams }).pipe(
       mergeMap(res => {
         if (res && Array.isArray(res.data)) {
           return of(res.data.map(data => new Article(data)));
@@ -33,7 +33,7 @@ export class ArticleDataService {
   }
 
   get(id: number): Observable<Article> {
-    return this.http.get<{ data: ArticleData }>(`${this.ARTICLES_API_PATH}/${id}`).pipe(
+    return this.http.get<{ data: ArticleData }>(`${ArticleDataService.API_PATH}/${id}`).pipe(
       mergeMap(res => {
         if (res && res.data) {
           return of(new Article(res.data));
@@ -42,38 +42,4 @@ export class ArticleDataService {
       })
     );
   }
-
-  create(postData: any): Observable<Article> {
-    return this.http.post<ArticleData>(this.ARTICLES_API_PATH, postData).pipe(
-      mergeMap(res => {
-        if (res) {
-          return of(new Article(res));
-        }
-        return throwError('RESPONSE_DATA_IS_NOT_VALID');
-      })
-    );
-  }
-
-  update(id: number, putData: any): Observable<Article> {
-    return this.http.put<ArticleData>(`${this.ARTICLES_API_PATH}/${id}`, putData).pipe(
-      mergeMap(res => {
-        if (res) {
-          return of(new Article(res));
-        }
-        return throwError('RESPONSE_DATA_IS_NOT_VALID');
-      })
-    );
-  }
-
-  delete(id: number): Observable<boolean> {
-    return this.http.delete<boolean>(`${this.ARTICLES_API_PATH}/${id}`).pipe(
-      mergeMap(res => {
-        if (res) {
-          return of(true);
-        }
-        return throwError('RESPONSE_DATA_IS_NOT_VALID');
-      })
-    );
-  }
-
 }
