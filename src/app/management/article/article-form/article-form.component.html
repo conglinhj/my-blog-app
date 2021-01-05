@@ -2,11 +2,15 @@
     <button type="button"
             mat-raised-button
             color="primary"
-            (click)="onSave(true)">Publish</button>
+            (click)="onSave(true)">
+            Publish
+    </button>
     <button type="button"
             mat-raised-button
             color="warn"
-            (click)="onSave(false)">Draft</button>
+            (click)="onSave(false)">
+            Draft
+    </button>
 </div>
 
 <form [formGroup]="form">
@@ -16,7 +20,9 @@
                matInput
                type="text"
                placeholder="Title">
-        <mat-error *ngIf="form.controls.title.hasError('required')">required</mat-error>
+        <mat-error *ngIf="form.controls.title.hasError('required')">
+            required
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -24,8 +30,15 @@
         <textarea formControlName="description"
                   matInput
                   placeholder="Description"
-                  rows="5"></textarea>
+                  rows="5">
+        </textarea>
     </mat-form-field>
+
+    <app-tag-selection class="tag-selection"
+                       [dataSource]="tags"
+                       [selectedTags]="article?.tags"
+                       (selectedTagsChanged)="onTagsChanged($event)">
+    </app-tag-selection>
 
     <editor formControlName="content"
             class="content-editor"

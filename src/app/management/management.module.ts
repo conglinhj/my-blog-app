@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ManageRoutingModule } from './management-routing.module';
 import { ManagementComponent } from './management.component';
@@ -14,7 +14,7 @@ import { ManagementComponent } from './management.component';
   ],
   imports: [
     CommonModule,
-    MatListModule,
+    SharedModule,
     ManageRoutingModule
   ],
   exports: [RouterModule]

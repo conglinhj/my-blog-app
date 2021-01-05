@@ -49,7 +49,7 @@ const materialModules = [
   // CdkTreeModule,
   // ClipboardModule,
   // DragDropModule,
-  // MatAutocompleteModule,
+  MatAutocompleteModule,
   // MatBadgeModule,
   // MatBottomSheetModule,
   MatButtonModule,

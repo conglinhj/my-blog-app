@@ -2,11 +2,9 @@
     <mat-spinner *ngIf="isLoading" [diameter]="30"></mat-spinner>
 
     <div *ngIf="articles$ | async as articles" class="article-list">
-        <div *ngFor="let article of articles" class="article-list-item" >
-            <a [routerLink]="'/article/' + article.id">
-                <h3>{{ article.title }}</h3>
-            </a>
-            <div><small>{{ article.publishedAt | date: 'd-MMMM-y H:m' }}</small></div>
+        <div *ngFor="let article of articles" class="article-list__item" >
+            <a [routerLink]="'/article/' + article.id" class="article-list__item__title">{{ article.title }}</a>
+            <div class="article-list__item__info">{{ article.publishedAt | date: 'd-MMMM-y H:m' }}</div>
             <p>{{ article.description }}</p>
         </div>
     </div>

@@ -1,3 +1,7 @@
+import { CategoryData } from './category-data';
+import { TagData } from './tag-data';
+
+
 export interface ArticleData {
   id: number;
   author_id: number;
@@ -10,4 +14,6 @@ export interface ArticleData {
   published_at: number;
   created_at: number;
   updated_at: number;
+  category: CategoryData;
+  tags: TagData[];
 }

@@ -1,7 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/theming';
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
@@ -11,4 +15,5 @@ $custom-typography: mat-typography-config(
   $font-family: '-apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;'
 );
 
+// material custom font-family
 @include mat-core($custom-typography);

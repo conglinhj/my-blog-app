@@ -1,0 +1,34 @@
+<mat-chip-list #tagList>
+
+    <mat-chip
+        *ngFor="let tag of selectedTags$.value; let i = index"
+        color="primary"
+        selected
+        class="mat-chip-selected"
+        (removed)="onTagRemoved(i)">
+        {{ tag.name }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+
+    <input
+        #autocompleteInput
+        placeholder="new tag..."
+        [matAutocomplete]="tagAutocomplete"
+        [matChipInputFor]="tagList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (input)="onSearch($event.target.value)">
+
+</mat-chip-list>
+
+<mat-autocomplete
+    #tagAutocomplete="matAutocomplete"
+    [displayWith]="matAutoCompleteDisplayWith"
+    (optionSelected)="onTagselected($event)">
+
+    <mat-option
+        *ngFor="let tag of filteredTags$ | async"
+        [value]="tag">
+        {{ tag.name }}
+    </mat-option>
+
+</mat-autocomplete>

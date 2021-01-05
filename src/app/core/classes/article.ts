@@ -1,4 +1,6 @@
 import { ArticleData } from './../interfaces/article-data';
+import { Category } from './category';
+import { Tag } from './tag';
 
 
 export class Article {
@@ -10,6 +12,8 @@ export class Article {
   title: string;
   description: string;
   content: string;
+  readonly category: Category;
+  readonly tags: Tag[];
   readonly isPublished: boolean;
   readonly publishedAt: number;
   readonly createdAt: number;
@@ -27,5 +31,13 @@ export class Article {
     this.publishedAt = data.published_at;
     this.createdAt = data.created_at;
     this.updatedAt = data.updated_at;
+
+    if (data.category) {
+      this.category = new Category(data.category);
+    }
+
+    if (Array.isArray(data.tags)) {
+      this.tags = data.tags.map(tag => new Tag(tag));
+    }
   }
 }

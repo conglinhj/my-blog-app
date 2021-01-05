@@ -1,4 +1,4 @@
 <article *ngIf="article$ | async as article" class="article">
-    <h2>{{ article.title }}</h2>
+    <h1>{{ article.title }}</h1>
     <div [innerHTML]="article.content"></div>
 </article>

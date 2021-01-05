@@ -1,14 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
 import { RouterModule, Routes } from '@angular/router';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { TagSelectionModule } from '../../components/tag-selection/tag-selection.module';
 import { ArticleFormComponent } from './article-form/article-form.component';
 import { ArticleListComponent } from './article-list/article-list.component';
 
@@ -25,16 +19,9 @@ const routes: Routes = [
     ArticleFormComponent
   ],
   imports: [
-    CommonModule,
     EditorModule,
-    FormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatTableModule,
-    ReactiveFormsModule,
+    SharedModule,
+    TagSelectionModule,
     RouterModule.forChild(routes)
   ],
   providers: [
