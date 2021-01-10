@@ -10,7 +10,8 @@ export class User {
   readonly createdAt: string;
   readonly updatedAt: string;
 
-  constructor(public data: UserData) {
+  constructor(public data: Readonly<UserData>) {
+    Object.freeze(data);
     this.id = data.id;
     this.name = data.name;
     this.email = data.email;

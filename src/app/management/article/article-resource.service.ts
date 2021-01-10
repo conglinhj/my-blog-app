@@ -76,4 +76,26 @@ export class ArticleResourceService {
     );
   }
 
+  publishArticle(id: number): Observable<boolean> {
+    return this.http.post<boolean>(`${this.ARTICLES_API_PATH}/publish/${id}`, null).pipe(
+      mergeMap(res => {
+        if (res) {
+          return of(true);
+        }
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
+      })
+    );
+  }
+
+  draftArticle(id: number): Observable<boolean> {
+    return this.http.post<boolean>(`${this.ARTICLES_API_PATH}/draft/${id}`, null).pipe(
+      mergeMap(res => {
+        if (res) {
+          return of(true);
+        }
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
+      })
+    );
+  }
+
 }

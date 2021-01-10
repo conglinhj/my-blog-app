@@ -19,7 +19,8 @@ export class Article {
   readonly createdAt: number;
   readonly updatedAt: number;
 
-  constructor(public data: ArticleData) {
+  constructor(public data: Readonly<ArticleData>) {
+    Object.freeze(data);
     this.id = data.id;
     this.authorId = data.author_id;
     this.categoryId = data.category_id;

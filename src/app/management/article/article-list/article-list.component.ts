@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, first } from 'rxjs/operators';
+import { filter, finalize, first, mergeMap, take } from 'rxjs/operators';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Article } from 'src/app/core/classes/article';
 import { ArticleResourceService } from '../article-resource.service';
@@ -13,16 +14,17 @@ import { ArticleResourceService } from '../article-resource.service';
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.scss']
 })
-export class ArticleListComponent implements OnInit {
+export class ArticleListComponent {
 
   articles$: Observable<Article[]>;
   displayedColumns: string[] = ['id', 'title', 'published', 'actions'];
   isLoading = true;
 
   constructor(
-    private articleResourceService: ArticleResourceService,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private articleResourceService: ArticleResourceService,
   ) {
     this.articles$ = this.articleResourceService
       .getList({})
@@ -32,7 +34,40 @@ export class ArticleListComponent implements OnInit {
       );
   }
 
-  ngOnInit(): void {
+  onPublish(article: Article): void {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: { message: `Publish?` }
+    }).afterClosed()
+      .pipe(
+        filter(result => result),
+        mergeMap(() => this.articleResourceService.publishArticle(article.id)),
+        take(1)
+      )
+      .subscribe({
+        next: () => {
+          // TODO: update list
+          this.snackBar.open('Successful');
+        },
+        error: () => this.snackBar.open('Failed')
+      });
+  }
+
+  onDraft(article: Article): void {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: { message: `Draft?` }
+    }).afterClosed()
+      .pipe(
+        filter(result => result),
+        mergeMap(() => this.articleResourceService.draftArticle(article.id)),
+        take(1)
+      )
+      .subscribe({
+        next: () => {
+          // TODO: update list
+          this.snackBar.open('Successful');
+        },
+        error: () => this.snackBar.open('Failed')
+      });
   }
 
   onEdit(article: Article): void {

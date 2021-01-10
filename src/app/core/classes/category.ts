@@ -11,7 +11,8 @@ export class Category {
   readonly createdAt: number;
   readonly updatedAt: number;
 
-  constructor(public data: CategoryData) {
+  constructor(public data: Readonly<CategoryData>) {
+    Object.freeze(data);
     this.id = data.id;
     this.parentId = data.parent_id;
     this.slug = data.slug;

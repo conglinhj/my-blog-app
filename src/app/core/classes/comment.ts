@@ -11,7 +11,8 @@ export class Comment {
   readonly updatedAt: number;
   content: string;
 
-  constructor(public data: CommentData) {
+  constructor(public data: Readonly<CommentData>) {
+    Object.freeze(data);
     this.id = data.id;
     this.parentId = data.parent_id;
     this.authorId = data.author_id;

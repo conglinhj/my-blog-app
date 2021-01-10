@@ -9,7 +9,8 @@ export class Tag {
   readonly updatedAt: number;
   name: string;
 
-  constructor(public data: TagData) {
+  constructor(public data: Readonly<TagData>) {
+    Object.freeze(data);
     this.id = data.id;
     this.slug = data.slug;
     this.createdAt = data.created_at;
