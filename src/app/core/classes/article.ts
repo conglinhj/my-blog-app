@@ -36,8 +36,6 @@ export class Article {
       this.category = new Category(data.category);
     }
 
-    if (Array.isArray(data.tags)) {
-      this.tags = data.tags.map(tag => new Tag(tag));
-    }
+    this.tags = Array.isArray(data.tags) ? data.tags.map(tag => new Tag(tag)) : [];
   }
 }

@@ -1,10 +1,25 @@
 <div class="home-container">
     <mat-spinner *ngIf="isLoading" [diameter]="30"></mat-spinner>
 
-    <div *ngIf="articles$ | async as articles" class="article-list">
-        <div *ngFor="let article of articles" class="article-list__item" >
-            <a [routerLink]="'/article/' + article.id" class="article-list__item__title">{{ article.title }}</a>
-            <div class="article-list__item__info">{{ article.publishedAt | date: 'd-MMMM-y H:m' }}</div>
+    <div *ngIf="articles$ | async as articles;" class="article-list">
+        <div *ngFor="let article of articles; trackBy: trackByArticleId" class="article-list__item">
+
+            <a class="article-list__item__title" [routerLink]="'/article/' + article.id">
+                {{ article.title }}
+            </a>
+
+            <div class="article-list__item__info">
+                <span>{{ article.publishedAt | date: 'd-MMMM-y H:m' }}</span>
+
+                <div class="tag-info">
+                    <mat-chip-list>
+                        <mat-chip *ngFor="let tag of article.tags; trackBy: trackByTagId">
+                            {{ tag.name }}
+                        </mat-chip>
+                    </mat-chip-list>
+                </div>
+            </div>
+
             <p>{{ article.description }}</p>
         </div>
     </div>

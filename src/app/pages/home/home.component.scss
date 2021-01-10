@@ -17,6 +17,15 @@
         font-size: 12px;
         color: gray;
         margin-bottom: 4px;
+        display: flex;
+
+        .tag-info {
+          margin-left: 20px;
+
+          .mat-chip {
+            min-height: 24px;
+          }
+        }
       }
     }
   }
