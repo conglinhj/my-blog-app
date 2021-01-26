@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FnCallPipe } from '../core/pipes/fn-call.pipe';
+import { FnCallPipe } from './pipes/fn-call.pipe';
 import { MaterialModule } from './material.module';
 
 

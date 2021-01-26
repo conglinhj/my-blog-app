@@ -8,8 +8,7 @@ import { ArticleDataService } from 'src/app/core/services/article-data.service';
 
 @Component({
   selector: 'app-article-detail',
-  templateUrl: './article-detail.component.html',
-  styleUrls: ['./article-detail.component.scss']
+  templateUrl: './article-detail.component.html'
 })
 export class ArticleDetailComponent implements OnInit {
 

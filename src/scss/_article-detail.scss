@@ -1,0 +1,13 @@
+.article {
+  max-width: 664px;
+  padding: 32px;
+  box-sizing: border-box;
+  margin: 32px auto;
+  word-break: break-all;
+
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+  }
+}
