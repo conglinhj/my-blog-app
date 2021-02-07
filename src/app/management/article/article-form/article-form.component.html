@@ -1,6 +1,12 @@
 <div class="actions">
     <button type="button"
             mat-raised-button
+            color="basic"
+            routerLink="/management/articles">
+            Go to list
+    </button>
+    <button type="button"
+            mat-raised-button
             color="primary"
             (click)="onSave(true)">
             Publish
@@ -35,7 +41,7 @@
     </mat-form-field>
 
     <app-tag-selection class="tag-selection"
-                       [dataSource]="tags"
+                       [dataSource]="tags$ | async"
                        [selectedTags]="article?.tags"
                        (selectedTagsChanged)="onTagsChanged($event)">
     </app-tag-selection>

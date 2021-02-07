@@ -44,10 +44,10 @@ export class ArticleResourceService {
   }
 
   create(postData: any): Observable<Article> {
-    return this.http.post<ArticleData>(this.ARTICLES_API_PATH, postData).pipe(
+    return this.http.post<{ data: ArticleData }>(this.ARTICLES_API_PATH, postData).pipe(
       mergeMap(res => {
-        if (res) {
-          return of(new Article(res));
+        if (res && res.data) {
+          return of(new Article(res.data));
         }
         return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })
@@ -55,10 +55,10 @@ export class ArticleResourceService {
   }
 
   update(id: number, putData: any): Observable<Article> {
-    return this.http.put<ArticleData>(`${this.ARTICLES_API_PATH}/${id}`, putData).pipe(
+    return this.http.put<{ data: ArticleData }>(`${this.ARTICLES_API_PATH}/${id}`, putData).pipe(
       mergeMap(res => {
-        if (res) {
-          return of(new Article(res));
+        if (res && res.data) {
+          return of(new Article(res.data));
         }
         return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })

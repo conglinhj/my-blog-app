@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
 import { AuthResponseData } from '../interfaces/auth-response-data';
 import { LoginRequestData } from '../interfaces/login-request-data';
 import { RegisterRequestData } from '../interfaces/register-request-data';
@@ -90,7 +90,12 @@ export class AuthService {
   verifyAccess(): Observable<boolean> {
     return this.http.post<AuthResponseData>('verify_access', null).pipe(
       mergeMap(res => of(!!res)),
-      catchError(() => of(false))
+      catchError(() => of(false)),
+      tap(res => {
+        if (!res) {
+          this.removeCredentials();
+        }
+      })
     );
   }
 
