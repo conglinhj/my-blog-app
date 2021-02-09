@@ -1,11 +1,13 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, finalize, first, mergeMap, take } from 'rxjs/operators';
+import { MatTableDataSource } from '@angular/material/table';
+import { filter, finalize, first, mergeMap, take, tap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Article } from 'src/app/core/classes/article';
+import { ArticleBulkActionName } from '../article-resource.interface';
 import { ArticleResourceService } from '../article-resource.service';
 
 
@@ -16,22 +18,62 @@ import { ArticleResourceService } from '../article-resource.service';
 })
 export class ArticleListComponent {
 
-  articles$: Observable<Article[]>;
-  displayedColumns: string[] = ['id', 'title', 'published', 'actions'];
+  displayedColumns: string[] = ['selection', 'id', 'status', 'title', 'actions'];
   isLoading = true;
+  selection = new SelectionModel<number>(true, []);
+  dataSource = new MatTableDataSource<Article>([]);
 
   constructor(
-    private route: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private articleResourceService: ArticleResourceService,
   ) {
-    this.articles$ = this.articleResourceService
+    this.articleResourceService
       .getList({})
       .pipe(
         first(),
-        finalize(() => this.isLoading = false)
-      );
+        finalize(() => this.isLoading = false),
+        tap(articles => {
+          this.dataSource.data = articles;
+        })
+      )
+      .subscribe({
+        error: () => this.snackBar.open('Failed!')
+      });
+  }
+
+  isChecked = (articleId: number, _selectedLength: number): boolean => {
+    return this.selection.isSelected(articleId);
+  }
+
+  onselectionChange(event: MatCheckboxChange): void {
+    event.checked
+      ? this.dataSource.data.forEach(article => this.selection.select(article.id))
+      : this.selection.clear();
+  }
+
+  onBulkAction(actionName: ArticleBulkActionName): void {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          message: `Are you sure to ${actionName} ${this.selection.selected.length} article?`
+        }
+      })
+      .afterClosed()
+      .pipe(
+        filter(result => result),
+        mergeMap(() => {
+          return this.articleResourceService.bulkAction({
+            article_ids: this.selection.selected,
+            action_name: actionName
+          });
+        }),
+        take(1),
+      )
+      .subscribe({
+        next: () => this.snackBar.open(`${actionName} succeed`),
+        error: () => this.snackBar.open('Failed!')
+      });
   }
 
   onPublish(article: Article): void {
@@ -44,11 +86,8 @@ export class ArticleListComponent {
         take(1)
       )
       .subscribe({
-        next: () => {
-          // TODO: update list
-          this.snackBar.open('Successful');
-        },
-        error: () => this.snackBar.open('Failed')
+        next: () => this.snackBar.open('Published'),
+        error: () => this.snackBar.open('Failed!')
       });
   }
 
@@ -62,16 +101,9 @@ export class ArticleListComponent {
         take(1)
       )
       .subscribe({
-        next: () => {
-          // TODO: update list
-          this.snackBar.open('Successful');
-        },
-        error: () => this.snackBar.open('Failed')
+        next: () => this.snackBar.open('Drafted'),
+        error: () => this.snackBar.open('Failed!')
       });
-  }
-
-  onEdit(article: Article): void {
-    this.route.navigate([`management/articles/edit/${article.id}`]);
   }
 
   onDelete(article: Article): void {
@@ -82,11 +114,14 @@ export class ArticleListComponent {
         }
       })
       .afterClosed()
-      .pipe(first())
-      .subscribe(result => {
-        if (result === true) {
-          this.articleResourceService.delete(article.id).pipe(first()).subscribe();
-        }
+      .pipe(
+        filter(result => result),
+        mergeMap(() => this.articleResourceService.delete(article.id)),
+        take(1),
+      )
+      .subscribe({
+        next: () => this.snackBar.open('Deleted'),
+        error: () => this.snackBar.open('Failed!')
       });
   }
 }

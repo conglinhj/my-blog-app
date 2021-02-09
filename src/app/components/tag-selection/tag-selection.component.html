@@ -1,7 +1,7 @@
 <mat-chip-list #tagList>
 
     <mat-chip
-        *ngFor="let tag of selectedTags$.value; let i = index"
+        *ngFor="let tag of (selectedTags$ | async); let i = index"
         color="primary"
         selected
         class="mat-chip-selected"

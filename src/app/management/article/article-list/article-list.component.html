@@ -2,57 +2,98 @@
     <mat-icon>add</mat-icon>
 </button>
 
-<div>
-    <mat-spinner *ngIf="isLoading" [diameter]="30"></mat-spinner>
+<mat-spinner *ngIf="isLoading" [diameter]="30"></mat-spinner>
 
-    <table mat-table *ngIf="(articles$ | async) as articles;" [dataSource]="articles" class="mat-elevation-z8">
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> Id </th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
+<table mat-table *ngIf="dataSource.data.length" [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="selection">
+        <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+                (change)="$event && onselectionChange($event)"
+                [checked]="selection.selected.length === dataSource.data.length">
+            </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let article">
+            <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event && selection.toggle(article.id)"
+                [checked]="isChecked | fnCall: article.id: selection.selected.length">
+            </mat-checkbox> 
+        </td>
+    </ng-container>
 
-        <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef> Title </th>
-            <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-        </ng-container>
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let article"> {{article.id}} </td>
+    </ng-container>
 
-        <ng-container matColumnDef="published">
-            <th mat-header-cell *matHeaderCellDef> Published </th>
-            <td mat-cell *matCellDef="let element">
-                <mat-icon color="primary" *ngIf="element.isPublished">check_circle</mat-icon>
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let article" [class.published-article]="article.isPublished">
+            {{ article.isPublished ? 'published' : 'draft' }}
+        </td>
+    </ng-container>
 
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-                <div class="column-actions">
-                    <button mat-mini-fab color="primary" *ngIf="!element.isPublished else draftBtn"
-                        (click)="onPublish(element)">
-                        <mat-icon>publish</mat-icon>
-                    </button>
+    <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Title </th>
+        <td mat-cell *matCellDef="let article"> {{article.title}} </td>
+    </ng-container>
 
-                    <ng-template #draftBtn>
-                        <button mat-mini-fab color="basic" (click)="onDraft(element)">
-                            <mat-icon>unpublished</mat-icon>
-                        </button>
-                    </ng-template>
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td mat-cell *matCellDef="let article"> {{ article.description }} </td>
+    </ng-container>
 
-                    <button mat-mini-fab color="basic" (click)="onEdit(element)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let article">
+            <button mat-mini-fab
+                    color="primary"
+                    *ngIf="!article.isPublished else draftBtn"
+                    (click)="onPublish(article)">
+                <mat-icon>publish</mat-icon>
+            </button>
 
-                    <button mat-mini-fab color="warn" (click)="onDelete(element)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-            </td>
-        </ng-container>
+            <ng-template #draftBtn>
+                <button mat-mini-fab
+                        color="basic"
+                        (click)="onDraft(article)">
+                    <mat-icon>unpublished</mat-icon>
+                </button>
+            </ng-template>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-            (mouseenter)="$event.target.classList.add('active')"
-            (mouseleave)="$event.target.classList.remove('active')">
-        </tr>
-    </table>
+            <button mat-mini-fab
+                    color="basic"
+                    [routerLink]="'/management/articles/edit/' + article.id">
+                <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-mini-fab
+                    color="warn"
+                    (click)="onDelete(article)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (mouseenter)="$event.target.classList.add('active')"
+        (mouseleave)="$event.target.classList.remove('active')">
+    </tr>
+</table>
+
+<div *ngIf="selection.selected.length" class="bulk-actions mat-elevation-z8">
+    <p>selected: {{ selection.selected.length }}</p>
+
+    <button mat-mini-fab color="primary" (click)="onBulkAction('publish')">
+        <mat-icon>publish</mat-icon>
+    </button>
+
+    <button mat-mini-fab color="basic" (click)="onBulkAction('draft')">
+        <mat-icon>unpublished</mat-icon>
+    </button>
+
+    <button mat-mini-fab color="warn" (click)="onBulkAction('delete')">
+        <mat-icon>delete</mat-icon>
+    </button>
 </div>

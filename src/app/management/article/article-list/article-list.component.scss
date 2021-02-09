@@ -1,12 +1,14 @@
 table {
   width: 100%;
+  margin-bottom: 100px;
 
-  .column-actions {
-    display: flex;
-    justify-content: flex-end;
+  .mat-header-row {
+    .mat-column-id {
+      width: 60px;
+    }
 
-    button:not(:last-child) {
-      margin-right: 8px;
+    .mat-column-status {
+      width: 100px;
     }
   }
 
@@ -15,12 +17,42 @@ table {
       background-color: aliceblue;
     }
 
-    &:not(.active) .column-actions {
+    &:not(.active) .mat-column-actions * {
       visibility: hidden;
+    }
+
+    .mat-column-status {
+      color: gray;
+
+      &.published-article {
+        color: green;
+      }
+    }
+
+    .mat-column-actions {
+      text-align: end;
+
+      button {
+        margin-right: 8px;
+      }
     }
   }
 }
 
 .add-new {
   margin-bottom: 16px;
+}
+
+.bulk-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  text-align: center;
+  background-color: white;
+
+  button:not(:last-child) {
+    margin-right: 8px;
+  }
 }

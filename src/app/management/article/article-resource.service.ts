@@ -5,6 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import { Article } from 'src/app/core/classes/article';
 import { ArticleData } from 'src/app/core/interfaces/article-data';
 import { ArticleListRequestParams } from 'src/app/core/interfaces/article-list-request-params';
+import { ArticleBulkActionRequestParams } from './article-resource.interface';
 
 
 @Injectable({
@@ -67,6 +68,17 @@ export class ArticleResourceService {
 
   delete(id: number): Observable<boolean> {
     return this.http.delete<boolean>(`${this.ARTICLES_API_PATH}/${id}`).pipe(
+      mergeMap(res => {
+        if (res) {
+          return of(true);
+        }
+        return throwError('RESPONSE_DATA_IS_NOT_VALID');
+      })
+    );
+  }
+
+  bulkAction(postData: ArticleBulkActionRequestParams): Observable<boolean> {
+    return this.http.post<boolean>(`${this.ARTICLES_API_PATH}/bulk`, postData).pipe(
       mergeMap(res => {
         if (res) {
           return of(true);
