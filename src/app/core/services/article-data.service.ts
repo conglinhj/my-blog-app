@@ -4,7 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Article } from '../classes/article';
 import { ArticleData } from '../interfaces/article-data';
-import { ArticleListRequestParams } from '../interfaces/article-list-request-params';
+import { HttpParamsLiteral } from '../interfaces/http-params-literal';
 
 
 @Injectable({
@@ -16,13 +16,8 @@ export class ArticleDataService {
 
   constructor(private http: HttpClient) { }
 
-  getList(params: ArticleListRequestParams): Observable<Article[]> {
-    const formatedParams = {
-      page: String(params.page),
-      limit: String(params.limit)
-    };
-
-    return this.http.get<{ data: ArticleData[] }>(ArticleDataService.API_PATH, { params: formatedParams }).pipe(
+  getList(params: HttpParamsLiteral): Observable<Article[]> {
+    return this.http.get<{ data: ArticleData[] }>(ArticleDataService.API_PATH, { params }).pipe(
       mergeMap(res => {
         if (res && Array.isArray(res.data)) {
           return of(res.data.map(data => new Article(data)));

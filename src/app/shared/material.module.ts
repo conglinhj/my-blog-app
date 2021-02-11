@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -7,6 +6,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { NgModule } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -43,15 +43,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 
 const materialModules = [
-  // A11yModule,
-  // CdkStepperModule,
-  // CdkTableModule,
-  // CdkTreeModule,
-  // ClipboardModule,
-  // DragDropModule,
+  A11yModule,
+  CdkStepperModule,
+  CdkTableModule,
+  CdkTreeModule,
+  ClipboardModule,
+  DragDropModule,
   MatAutocompleteModule,
-  // MatBadgeModule,
-  // MatBottomSheetModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
   MatButtonModule,
   MatButtonToggleModule,
   MatCardModule,
@@ -59,33 +59,33 @@ const materialModules = [
   MatChipsModule,
   MatDatepickerModule,
   MatDialogModule,
-  // MatDividerModule,
-  // MatExpansionModule,
-  // MatGridListModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
-  // MatNativeDateModule,
+  MatNativeDateModule,
   MatPaginatorModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
-  // MatRippleModule,
+  MatRippleModule,
   MatSelectModule,
   MatSidenavModule,
-  // MatSliderModule,
-  // MatSlideToggleModule,
+  MatSliderModule,
+  MatSlideToggleModule,
   MatSnackBarModule,
-  // MatSortModule,
-  // MatStepperModule,
+  MatSortModule,
+  MatStepperModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  // MatTreeModule,
-  // PortalModule,
-  // ScrollingModule,
+  MatTreeModule,
+  PortalModule,
+  ScrollingModule,
 ];
 
 @NgModule({

@@ -1,10 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { filter, finalize, first, mergeMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, EMPTY, Subject } from 'rxjs';
+import { catchError, debounceTime, filter, finalize, first, mergeMap, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Article } from 'src/app/core/classes/article';
 import { ArticleBulkActionName } from '../article-resource.interface';
@@ -14,32 +17,94 @@ import { ArticleResourceService } from '../article-resource.service';
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.scss']
+  styleUrls: ['./article-list.component.scss'],
+  animations: []
 })
-export class ArticleListComponent {
+export class ArticleListComponent implements OnDestroy {
 
-  displayedColumns: string[] = ['selection', 'id', 'status', 'title', 'actions'];
-  isLoading = true;
+  displayedColumns: string[] = ['selection', 'id', 'isPublished', 'title', 'actions'];
+  isLoading = false;
   selection = new SelectionModel<number>(true, []);
   dataSource = new MatTableDataSource<Article>([]);
+  unsubscriber$ = new Subject();
+  pageSizeOptions: number[] = [10, 20, 50];
+  pagination$ = new BehaviorSubject<PageEvent>({
+    pageIndex: 0,
+    pageSize: this.pageSizeOptions[0],
+    length: 0
+  });
+  sort$ = new BehaviorSubject<Sort>(null);
+  collectionHttpParams: any = {
+    sort: {}
+  };
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private articleResourceService: ArticleResourceService,
   ) {
-    this.articleResourceService
-      .getList({})
-      .pipe(
-        first(),
-        finalize(() => this.isLoading = false),
-        tap(articles => {
-          this.dataSource.data = articles;
+    combineLatest([
+      this.pagination$.pipe(
+        debounceTime(300),
+        tap(pagination => {
+          this.collectionHttpParams.page = pagination.pageIndex + 1;
+          this.collectionHttpParams.limit = pagination.pageSize;
         })
-      )
-      .subscribe({
-        error: () => this.snackBar.open('Failed!')
-      });
+      ),
+      this.sort$.pipe(
+        debounceTime(300),
+        tap(sort => {
+          if (sort) {
+            if (sort.active == 'isPublished') {
+              sort.active = 'is_published';
+            }
+
+            if (sort.direction) {
+              this.collectionHttpParams.sort[sort.active] = sort.direction;
+            } else {
+              delete this.collectionHttpParams.sort[sort.active]
+            }
+          }
+        })
+      ),
+    ]).pipe(
+      switchMap(() => {
+        this.isLoading = true;
+
+        // TODO: Happy Lunar new year.
+        const params = { ...this.collectionHttpParams };
+        params.sort = [];
+        for (const [key, value] of Object.entries(this.collectionHttpParams.sort)) {
+          params.sort.push(`${key}:${value}`);
+        }
+
+        if (!params.sort.length) {
+          delete params.sort;
+        } else {
+          params.sort = params.sort.join(',');
+        }
+
+        return this.articleResourceService
+          .getList(params)
+          .pipe(
+            first(),
+            finalize(() => this.isLoading = false),
+            tap({
+              next: (articleCollection) => {
+                this.dataSource.data = articleCollection.data;
+                this.pagination$.value.length = articleCollection.total;
+              },
+              error: () => this.snackBar.open('Fetching failed!')
+            }),
+            catchError(() => EMPTY)
+          )
+      }),
+      takeUntil(this.unsubscriber$)
+    ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscriber$.complete();
   }
 
   isChecked = (articleId: number, _selectedLength: number): boolean => {
@@ -50,6 +115,14 @@ export class ArticleListComponent {
     event.checked
       ? this.dataSource.data.forEach(article => this.selection.select(article.id))
       : this.selection.clear();
+  }
+
+  onPaging(event: PageEvent): void {
+    this.pagination$.next(event);
+  }
+
+  onSortChange(event: Sort): void {
+    this.sort$.next(event);
   }
 
   onBulkAction(actionName: ArticleBulkActionName): void {
@@ -71,7 +144,10 @@ export class ArticleListComponent {
         take(1),
       )
       .subscribe({
-        next: () => this.snackBar.open(`${actionName} succeed`),
+        next: () => {
+          this.snackBar.open(`${actionName} succeed`);
+          this.selection.clear();
+        },
         error: () => this.snackBar.open('Failed!')
       });
   }

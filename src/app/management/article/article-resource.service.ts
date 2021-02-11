@@ -3,8 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Article } from 'src/app/core/classes/article';
+import { ArticleCollection } from 'src/app/core/classes/article-collection';
+import { ArticleCollectionResponse } from 'src/app/core/interfaces/article-collection-response';
 import { ArticleData } from 'src/app/core/interfaces/article-data';
-import { ArticleListRequestParams } from 'src/app/core/interfaces/article-list-request-params';
+import { HttpParamsLiteral } from 'src/app/core/interfaces/http-params-literal';
 import { ArticleBulkActionRequestParams } from './article-resource.interface';
 
 
@@ -17,16 +19,19 @@ export class ArticleResourceService {
 
   constructor(private http: HttpClient) { }
 
-  getList(params: ArticleListRequestParams): Observable<Article[]> {
-    const formatedParams = {
-      page: String(params.page),
-      limit: String(params.limit)
-    };
-
-    return this.http.get<{ data: ArticleData[] }>(this.ARTICLES_API_PATH, { params: formatedParams }).pipe(
+  getList(params: HttpParamsLiteral): Observable<ArticleCollection> {
+    return this.http.get<ArticleCollectionResponse>(this.ARTICLES_API_PATH, { params: params }).pipe(
       mergeMap(res => {
         if (res && Array.isArray(res.data)) {
-          return of(res.data.map(data => new Article(data)));
+          return of({
+            data: res.data.map(data => new Article(data)),
+            currentPage: res.current_page,
+            from: res.from,
+            lastPage: res.last_page,
+            perPage: res.per_page,
+            to: res.to,
+            total: res.total,
+          });
         }
         return throwError('RESPONSE_DATA_IS_NOT_VALID');
       })

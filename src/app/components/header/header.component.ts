@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { User } from 'src/app/core/classes/user';
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -17,8 +18,12 @@ export class HeaderComponent {
   }
 
   onLogout(): void {
-    this.auth.logout().subscribe(() => {
-      location.reload(); // TODO: should be smarter
-    });
+    this.auth.logout()
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          window.location.replace('/');
+        }
+      });
   }
 }
