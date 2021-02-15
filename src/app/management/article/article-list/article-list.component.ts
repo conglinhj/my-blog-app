@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BehaviorSubject, combineLatest, EMPTY, Subject } from 'rxjs';
-import { catchError, debounceTime, filter, finalize, first, mergeMap, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, debounceTime, filter, finalize, first, mergeMap, startWith, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Article } from 'src/app/core/classes/article';
 import { ArticleBulkActionName } from '../article-resource.interface';
@@ -33,10 +33,9 @@ export class ArticleListComponent implements OnDestroy {
     pageSize: this.pageSizeOptions[0],
     length: 0
   });
-  sort$ = new BehaviorSubject<Sort>(null);
-  collectionHttpParams: any = {
-    sort: {}
-  };
+  sort$ = new BehaviorSubject<{ [key: string]: string }>({});
+  collectionChanged$ = new Subject();
+  withDeleted$ = new BehaviorSubject<boolean>(true);
 
   constructor(
     private dialog: MatDialog,
@@ -44,48 +43,20 @@ export class ArticleListComponent implements OnDestroy {
     private articleResourceService: ArticleResourceService,
   ) {
     combineLatest([
-      this.pagination$.pipe(
-        debounceTime(300),
-        tap(pagination => {
-          this.collectionHttpParams.page = pagination.pageIndex + 1;
-          this.collectionHttpParams.limit = pagination.pageSize;
-        })
-      ),
-      this.sort$.pipe(
-        debounceTime(300),
-        tap(sort => {
-          if (sort) {
-            if (sort.active == 'isPublished') {
-              sort.active = 'is_published';
-            }
-
-            if (sort.direction) {
-              this.collectionHttpParams.sort[sort.active] = sort.direction;
-            } else {
-              delete this.collectionHttpParams.sort[sort.active]
-            }
-          }
-        })
-      ),
+      this.pagination$.pipe(debounceTime(300)),
+      this.sort$.pipe(debounceTime(300)),
+      this.withDeleted$.pipe(debounceTime(300)),
+      this.collectionChanged$.pipe(startWith(''))
     ]).pipe(
-      switchMap(() => {
+      switchMap(([pagination, sort, withDeleted]) => {
         this.isLoading = true;
-
-        // TODO: Happy Lunar new year.
-        const params = { ...this.collectionHttpParams };
-        params.sort = [];
-        for (const [key, value] of Object.entries(this.collectionHttpParams.sort)) {
-          params.sort.push(`${key}:${value}`);
-        }
-
-        if (!params.sort.length) {
-          delete params.sort;
-        } else {
-          params.sort = params.sort.join(',');
-        }
-
         return this.articleResourceService
-          .getList(params)
+          .getList({
+            page: String(pagination.pageIndex + 1),
+            limit: String(pagination.pageSize),
+            with_deleted: String(!!withDeleted),
+            sort: JSON.stringify(sort).slice(1, -1).replace(/"/g, '')
+          })
           .pipe(
             first(),
             finalize(() => this.isLoading = false),
@@ -122,7 +93,13 @@ export class ArticleListComponent implements OnDestroy {
   }
 
   onSortChange(event: Sort): void {
-    this.sort$.next(event);
+    const sort = this.sort$.value;
+    if (event.direction) {
+      sort[event.active] = event.direction;
+    } else {
+      delete sort[event.active];
+    }
+    this.sort$.next(sort);
   }
 
   onBulkAction(actionName: ArticleBulkActionName): void {
@@ -147,6 +124,7 @@ export class ArticleListComponent implements OnDestroy {
         next: () => {
           this.snackBar.open(`${actionName} succeed`);
           this.selection.clear();
+          this.collectionChanged$.next();
         },
         error: () => this.snackBar.open('Failed!')
       });
@@ -162,7 +140,10 @@ export class ArticleListComponent implements OnDestroy {
         take(1)
       )
       .subscribe({
-        next: () => this.snackBar.open('Published'),
+        next: () => {
+          this.snackBar.open('Published');
+          this.collectionChanged$.next();
+        },
         error: () => this.snackBar.open('Failed!')
       });
   }
@@ -177,7 +158,10 @@ export class ArticleListComponent implements OnDestroy {
         take(1)
       )
       .subscribe({
-        next: () => this.snackBar.open('Drafted'),
+        next: () => {
+          this.snackBar.open('Drafted');
+          this.collectionChanged$.next();
+        },
         error: () => this.snackBar.open('Failed!')
       });
   }
@@ -196,7 +180,10 @@ export class ArticleListComponent implements OnDestroy {
         take(1),
       )
       .subscribe({
-        next: () => this.snackBar.open('Deleted'),
+        next: () => {
+          this.snackBar.open('Deleted');
+          this.collectionChanged$.next();
+        },
         error: () => this.snackBar.open('Failed!')
       });
   }

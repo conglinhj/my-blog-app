@@ -18,6 +18,7 @@ export class Article {
   readonly publishedAt: number;
   readonly createdAt: number;
   readonly updatedAt: number;
+  readonly deletedAt: number;
 
   constructor(public data: Readonly<ArticleData>) {
     Object.freeze(data);
@@ -32,6 +33,7 @@ export class Article {
     this.publishedAt = data.published_at;
     this.createdAt = data.created_at;
     this.updatedAt = data.updated_at;
+    this.deletedAt = data.deleted_at;
 
     if (data.category) {
       this.category = new Category(data.category);

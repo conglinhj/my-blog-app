@@ -43,6 +43,18 @@ table {
   margin-bottom: 16px;
 }
 
+.no-data {
+  text-align: center;
+  padding: 16px;
+}
+
+.collection-footer-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 24px;
+}
+
 .bulk-actions {
   position: fixed;
   bottom: 0;
