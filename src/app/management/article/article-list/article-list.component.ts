@@ -23,7 +23,7 @@ import { ArticleResourceService } from '../article-resource.service';
 export class ArticleListComponent implements OnDestroy {
 
   displayedColumns: string[] = ['selection', 'id', 'isPublished', 'title', 'actions'];
-  isLoading = false;
+  isLoading = true;
   selection = new SelectionModel<number>(true, []);
   dataSource = new MatTableDataSource<Article>([]);
   unsubscriber$ = new Subject();
@@ -35,7 +35,7 @@ export class ArticleListComponent implements OnDestroy {
   });
   sort$ = new BehaviorSubject<{ [key: string]: string }>({});
   collectionChanged$ = new Subject();
-  withDeleted$ = new BehaviorSubject<boolean>(true);
+  withDeleted$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private dialog: MatDialog,

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FnCallPipe implements PipeTransform {
 
-  transform(fn: (...args: unknown[]) => unknown, ...args: unknown[]): unknown {
+  transform(fn: (...args: any[]) => any, ...args: any[]): any {
     return fn(...args);
   }
 

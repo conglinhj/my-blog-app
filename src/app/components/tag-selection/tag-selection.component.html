@@ -16,7 +16,7 @@
         [matAutocomplete]="tagAutocomplete"
         [matChipInputFor]="tagList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        (input)="onSearch($event.target.value)">
+        (input)="onSearch($any($event.target).value)">
 
 </mat-chip-list>
 

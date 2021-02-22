@@ -2,8 +2,6 @@
     <mat-icon>add</mat-icon>
 </button>
 
-<!-- <mat-spinner *ngIf="isLoading" [diameter]="30"></mat-spinner> -->
-
 <div class="mat-elevation-z8">
     <table mat-table
            [dataSource]="dataSource"
@@ -82,13 +80,13 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-            (mouseenter)="$event.target.classList.add('active')"
-            (mouseleave)="$event.target.classList.remove('active')">
-        </tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <div class="no-data" *ngIf="!dataSource.data?.length">no articles</div>
+    <div class="no-data" *ngIf="!dataSource.data?.length">
+        <mat-spinner *ngIf="isLoading else noData" [diameter]="30"></mat-spinner>
+        <ng-template #noData>no articles</ng-template>
+    </div>
 
     <div class="collection-footer-menu">
         <mat-checkbox

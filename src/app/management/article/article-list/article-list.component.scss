@@ -13,11 +13,11 @@ table {
   }
 
   .mat-row {
-    &.active {
+    &:hover {
       background-color: aliceblue;
     }
 
-    &:not(.active) .mat-column-actions * {
+    &:not(:hover) .mat-column-actions * {
       visibility: hidden;
     }
 
@@ -44,7 +44,8 @@ table {
 }
 
 .no-data {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   padding: 16px;
 }
 
