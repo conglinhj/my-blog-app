@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TagCreateFormComponent } from './tag-create-form.component';
 
@@ -6,7 +6,7 @@ describe('TagCreateFormComponent', () => {
   let component: TagCreateFormComponent;
   let fixture: ComponentFixture<TagCreateFormComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TagCreateFormComponent ]
     })

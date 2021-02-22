@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TagEditFormComponent } from './tag-edit-form.component';
 
@@ -6,7 +6,7 @@ describe('TagEditFormComponent', () => {
   let component: TagEditFormComponent;
   let fixture: ComponentFixture<TagEditFormComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TagEditFormComponent ]
     })
